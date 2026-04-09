@@ -1,0 +1,16 @@
+<div class="ds-file-zone"
+  [class.ds-file-zone--hover]="dragOver()"
+  (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
+  (drop)="onDrop($event)" (click)="fileInput.click()">
+  <div class="ds-file-icon">📁</div>
+  <span class="ds-file-zone-title">Arrastra archivos aquí</span>
+  <span class="ds-file-zone-sub">o haz click para seleccionar · máx {{ maxSizeMb() }}MB</span>
+  <input #fileInput type="file" [accept]="accept()" [multiple]="multiple()" hidden (change)="onFileSelect($event)">
+</div>
+@for (f of files(); track f.name) {
+  <div class="ds-file-item" style="margin-top:8px">
+    <span class="ds-file-item-icon">📄</span>
+    <span class="ds-file-item-name">{{ f.name }}</span>
+    <span class="ds-file-item-size">{{ f.size }}</span>
+  </div>
+}

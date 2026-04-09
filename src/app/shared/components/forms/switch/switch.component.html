@@ -1,0 +1,16 @@
+<label class="ds-switch-item" (click)="toggle()" style="cursor:pointer">
+  <span
+    class="ds-switch-track"
+    [class.ds-switch-track--on]="checked()"
+    [class.ds-switch-track--sm]="size() === 'sm'"
+    [class.ds-switch-track--disabled]="disabled()"
+    role="switch"
+    [attr.aria-checked]="checked()"
+  >
+    <span class="ds-switch-thumb"></span>
+  </span>
+  @if (label()) {
+    <span class="ds-switch-label">{{ label() }}</span>
+  }
+  <ng-content></ng-content>
+</label>

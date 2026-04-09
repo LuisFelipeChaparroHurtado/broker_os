@@ -1,0 +1,22 @@
+<div class="ds-multi-input" [class.ds-multi-input--focus]="focused()" (click)="toggleOpen()">
+  @for (val of selected(); track val) {
+    <span class="ds-multi-chip">
+      {{ labelFor(val) }}
+      <span class="ds-multi-chip-x" (click)="remove(val, $event)">✕</span>
+    </span>
+  }
+  @if (selected().length === 0) {
+    <span class="ds-multi-placeholder">{{ placeholder() }}</span>
+  }
+</div>
+@if (open()) {
+  <div class="ds-dropdown-panel" style="margin-top:4px">
+    @for (opt of options(); track opt.value) {
+      <div class="ds-dropdown-item"
+        [class.ds-dropdown-item--active]="isSelected(opt.value)"
+        (click)="toggleOption(opt.value)">
+        {{ opt.label }}
+      </div>
+    }
+  </div>
+}

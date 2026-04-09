@@ -1,0 +1,18 @@
+<div class="ds-input-wrapper" style="width:100%">
+  <input class="ds-input" [class.ds-input--focus]="focused()"
+    [placeholder]="placeholder()"
+    [value]="query()"
+    [disabled]="disabled()"
+    (input)="onInput($event)"
+    (focus)="onFocus()" (blur)="onBlur()">
+</div>
+@if (open() && filtered().length > 0) {
+  <div class="ds-autocomplete-panel" style="width:100%">
+    @for (item of filtered(); track item.label) {
+      <div class="ds-autocomplete-item" (mousedown)="pick(item)">
+        <span>{{ item.label }}</span>
+        @if (item.sub) { <span class="ds-autocomplete-sub">{{ item.sub }}</span> }
+      </div>
+    }
+  </div>
+}

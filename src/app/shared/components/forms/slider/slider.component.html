@@ -1,0 +1,16 @@
+<div class="ds-slider-wrapper">
+  @if (showValue()) {
+    <span class="ds-slider-value">{{ internalValue() }}</span>
+  }
+  <input type="range" class="ds-slider"
+    [min]="min()" [max]="max()" [step]="step()"
+    [value]="internalValue()"
+    [disabled]="disabled()"
+    (input)="onInput($event)">
+  @if (showLabels()) {
+    <div class="ds-slider-labels">
+      <span class="ds-slider-label">{{ min() }}</span>
+      <span class="ds-slider-label">{{ max() }}</span>
+    </div>
+  }
+</div>

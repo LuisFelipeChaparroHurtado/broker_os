@@ -1,0 +1,19 @@
+<div class="ds-field">
+  @if (label()) {
+    <label class="ds-label">
+      {{ label() }}@if (required()) {<span style="color:var(--color-danger);margin-left:3px">*</span>}
+    </label>
+  }
+
+  <ng-content></ng-content>
+
+  @if (error()) {
+    <span class="ds-error-text">{{ error() }}</span>
+  }
+  @if (helper() && !error()) {
+    <span class="ds-helper">{{ helper() }}</span>
+  }
+  @if (charCount()) {
+    <span class="ds-char-counter">{{ charCount() }}</span>
+  }
+</div>

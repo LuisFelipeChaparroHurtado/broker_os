@@ -1,0 +1,5 @@
+<a class="ds-link" [class.ds-link--muted]="variant() === 'muted'"
+  [href]="href()" [attr.target]="external() ? '_blank' : null"
+  [attr.rel]="external() ? 'noopener noreferrer' : null">
+  <ng-content></ng-content>
+</a>

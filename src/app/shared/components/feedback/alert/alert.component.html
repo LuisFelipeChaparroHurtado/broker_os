@@ -1,0 +1,22 @@
+<div [class]="alertClasses()" role="alert">
+  <span class="ds-alert-icon" aria-hidden="true">{{ icon() }}</span>
+
+  <div class="ds-alert-body">
+    @if (title()) {
+      <div class="ds-alert-title">{{ title() }}</div>
+    }
+    @if (message()) {
+      <div class="ds-alert-text">{{ message() }}</div>
+    }
+    <ng-content></ng-content>
+  </div>
+
+  @if (closeable()) {
+    <span
+      class="ds-alert-close"
+      role="button"
+      aria-label="Cerrar alerta"
+      (click)="closed.emit()"
+    >&#x2715;</span>
+  }
+</div>

@@ -1,0 +1,85 @@
+<!-- Mobile menu button -->
+<button class="mobile-menu-btn" (click)="toggleMobile()">☰</button>
+
+<aside class="sidebar" [class.sidebar--open]="mobileOpen()">
+  <!-- Brand -->
+  <div class="sidebar-brand">
+    <span class="sidebar-brand-name">{{ brandName() }}</span>
+    <span class="sidebar-brand-tag">{{ brandTag() }}</span>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="sidebar-nav">
+    @for (section of sections(); track section.label; let si = $index) {
+      <div class="nav-section">
+        <!-- Section toggle -->
+        <button class="nav-section-toggle" (click)="toggleSection(si)">
+          <span class="nav-section-label">{{ section.label }}</span>
+          <svg class="nav-chevron" [style.transform]="isSectionCollapsed(si) ? 'rotate(-90deg)' : 'rotate(0)'"
+            width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <!-- Items -->
+        @if (!isSectionCollapsed(si)) {
+          <ul class="nav-group">
+            @for (item of section.items; track item.key) {
+              <li>
+                <!-- Item with children (parent) -->
+                @if (item.children?.length) {
+                  <button class="nav-item nav-parent"
+                    [class.active]="activeKey() === item.key"
+                    (click)="onItemClick(item)">
+                    {{ item.label }}
+                    <svg class="nav-sub-chevron"
+                      [style.transform]="isGroupCollapsed(item.key) ? 'rotate(-90deg)' : 'rotate(0)'"
+                      width="10" height="10" viewBox="0 0 12 12" fill="none">
+                      <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+
+                  @if (!isGroupCollapsed(item.key)) {
+                    <ul class="nav-subgroup">
+                      @for (child of item.children; track child.key) {
+                        <li>
+                          <button class="nav-subitem"
+                            [class.active]="activeKey() === child.key"
+                            (click)="onNavigate(child.key)">
+                            {{ child.label }}
+                          </button>
+                        </li>
+                      }
+                    </ul>
+                  }
+                } @else {
+                  <!-- Simple item -->
+                  <button class="nav-item"
+                    [class.active]="activeKey() === item.key"
+                    (click)="onNavigate(item.key)">
+                    {{ item.label }}
+                  </button>
+                }
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    }
+  </nav>
+
+  <!-- Footer -->
+  <div class="sidebar-footer">
+    <button class="theme-toggle" (click)="onThemeToggle()">
+      <span class="theme-toggle-icon">
+        @if (isDark()) {
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="color:rgba(92,247,203,0.85)"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        } @else {
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:#7C31C7"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        }
+      </span>
+      <span class="theme-toggle-label">{{ isDark() ? 'Modo oscuro' : 'Modo claro' }}</span>
+    </button>
+    <span class="sidebar-footer-text">{{ brandName() }} · {{ brandTag() }}</span>
+  </div>
+</aside>

@@ -1,0 +1,492 @@
+<div class="page">
+
+  <!-- ══ HEADER ══════════════════════════════════════ -->
+  <header class="page__header">
+    <div>
+      <p class="section-module-label">Broker OS · Design System</p>
+      <h1 class="page__title">Component Demo</h1>
+    </div>
+    <div class="page__actions">
+      <app-btn variant="ghost" size="sm" (btnClick)="toast.mint('Tema', 'Light mode próximamente')">
+        ☀ Tema
+      </app-btn>
+      <app-btn variant="primary" size="sm" (btnClick)="toast.success('Guardado', 'Configuración guardada')">
+        Guardar
+      </app-btn>
+    </div>
+  </header>
+
+  <div class="section-divider"></div>
+
+  <!-- ══════════════════════════════════════════════════
+       COMPONENTES — ACCIONES
+       ══════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <p class="section-module-label">Componentes — Acciones</p>
+    <h2 class="demo-title">Botones</h2>
+
+    <p class="demo-subtitle">Jerarquía de variantes</p>
+    <div class="demo-row">
+      <app-btn variant="primary">Primary</app-btn>
+      <app-btn variant="secondary">Secondary</app-btn>
+      <app-btn variant="ghost">Ghost</app-btn>
+      <app-btn variant="mint">Mint</app-btn>
+      <app-btn variant="danger">Danger</app-btn>
+    </div>
+
+    <p class="demo-subtitle">Tamaños</p>
+    <div class="demo-row">
+      <app-btn variant="primary" size="sm">SM</app-btn>
+      <app-btn variant="primary">MD</app-btn>
+      <app-btn variant="primary" size="lg">LG</app-btn>
+    </div>
+
+    <p class="demo-subtitle">Estados</p>
+    <div class="demo-row">
+      <app-btn variant="primary">Default</app-btn>
+      <app-btn variant="primary" [loading]="true">Ejecutando…</app-btn>
+      <app-btn variant="primary" [disabled]="true">Disabled</app-btn>
+    </div>
+
+    <p class="demo-subtitle">Icon Buttons & FAB</p>
+    <div class="demo-row">
+      <app-btn variant="ghost" [iconOnly]="true" icon="⚙">⚙</app-btn>
+      <app-btn variant="secondary" [iconOnly]="true" [round]="true" icon="+">+</app-btn>
+      <app-menu [items]="menuItems" triggerLabel="Menú" (menuAction)="onMenuAction($event)"></app-menu>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ══════════════════════════════════════════════════
+       COMPONENTES — INPUTS & FORMS
+       ══════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <p class="section-module-label">Componentes — Inputs & Forms</p>
+    <h2 class="demo-title">Formulario de Orden</h2>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="demo-form">
+      <div class="demo-form-grid">
+
+        <app-form-field label="Símbolo" [required]="true" [error]="form.get('symbol')?.invalid && form.get('symbol')?.touched ? 'Campo requerido' : ''">
+          <app-select
+            [options]="symbolOptions"
+            placeholder="Selecciona un par..."
+            formControlName="symbol"
+          ></app-select>
+        </app-form-field>
+
+        <app-form-field label="Cantidad" [required]="true" helper="Mínimo 0.001">
+          <app-input
+            type="number"
+            placeholder="0.001"
+            iconLeft="₿"
+            formControlName="quantity"
+          ></app-input>
+        </app-form-field>
+
+        <app-form-field label="Tipo de Orden">
+          <app-radio-group [options]="radioOptions" formControlName="orderType"></app-radio-group>
+        </app-form-field>
+
+        <app-form-field label="Notas" helper="Opcional" charCount="{{ form.get('notes')?.value?.length ?? 0 }} / 500">
+          <app-textarea placeholder="Observaciones de la operación..." [maxLength]="500" formControlName="notes"></app-textarea>
+        </app-form-field>
+
+        <app-form-field label="Input con estado error">
+          <app-input placeholder="Error..." state="error"></app-input>
+        </app-form-field>
+
+        <app-form-field label="Input con estado success">
+          <app-input placeholder="OK" state="success" iconRight="✓"></app-input>
+        </app-form-field>
+
+      </div>
+
+      <div class="demo-row" style="margin-top: var(--space-4)">
+        <app-checkbox label="Notificar al ejecutar" formControlName="notify"></app-checkbox>
+        <app-switch label="Modo avanzado"></app-switch>
+      </div>
+
+      <div class="demo-row" style="margin-top: var(--space-6)">
+        <app-btn type="submit" variant="primary">Enviar orden</app-btn>
+        <app-btn variant="ghost" type="button" (btnClick)="form.reset()">Limpiar</app-btn>
+      </div>
+    </form>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ══════════════════════════════════════════════════
+       COMPONENTES — INPUTS AVANZADOS
+       ══════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <p class="section-module-label">Componentes — Inputs Avanzados</p>
+    <h2 class="demo-title">Slider, Multi-select, Autocomplete, Datepicker</h2>
+
+    <div class="demo-form-grid" style="max-width:700px">
+      <div>
+        <p class="demo-subtitle">Slider — Exposición 65%</p>
+        <app-slider [min]="0" [max]="100" [value]="65"></app-slider>
+      </div>
+      <div>
+        <p class="demo-subtitle">Slider — Apalancamiento 10x</p>
+        <app-slider [min]="1" [max]="100" [value]="10"></app-slider>
+      </div>
+    </div>
+
+    <div class="demo-form-grid" style="max-width:700px; margin-top: var(--space-6)">
+      <app-form-field label="Multi-select">
+        <app-multi-select [options]="multiOptions" placeholder="Seleccionar activos..."></app-multi-select>
+      </app-form-field>
+
+      <app-form-field label="Autocomplete">
+        <app-autocomplete [suggestions]="autoSuggestions" placeholder="Buscar instrumento..."></app-autocomplete>
+      </app-form-field>
+    </div>
+
+    <div class="demo-form-grid" style="max-width:700px; margin-top: var(--space-6)">
+      <div>
+        <p class="demo-subtitle">Datepicker</p>
+        <app-datepicker></app-datepicker>
+      </div>
+      <div>
+        <p class="demo-subtitle">File Upload</p>
+        <app-file-upload accept=".csv,.xlsx" [maxSizeMb]="10"></app-file-upload>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ══════════════════════════════════════════════════
+       COMPONENTES — NAVEGACIÓN
+       ══════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <p class="section-module-label">Componentes — Navegación</p>
+    <h2 class="demo-title">Navbar, Tabs, Breadcrumbs, Stepper, Paginación</h2>
+
+    <p class="demo-subtitle">Navbar</p>
+    <app-navbar brand="Broker OS" [items]="navItems">
+      <app-btn variant="mint" size="sm">Depositar</app-btn>
+    </app-navbar>
+
+    <div style="margin-top: var(--space-6)">
+      <p class="demo-subtitle">Tabs — Línea</p>
+      <app-tabs [tabs]="lineTabs" activeTab="positions" variant="line"></app-tabs>
+    </div>
+
+    <div style="margin-top: var(--space-6)">
+      <p class="demo-subtitle">Tabs — Pill</p>
+      <app-tabs [tabs]="pillTabs" activeTab="1m" variant="pill"></app-tabs>
+    </div>
+
+    <div style="margin-top: var(--space-6)">
+      <p class="demo-subtitle">Breadcrumbs</p>
+      <app-breadcrumbs [items]="breadcrumbs"></app-breadcrumbs>
+    </div>
+
+    <div style="margin-top: var(--space-6)">
+      <p class="demo-subtitle">Stepper — Paso 2 de 4</p>
+      <app-stepper [steps]="steps" [activeStep]="1"></app-stepper>
+    </div>
+
+    <div style="margin-top: var(--space-6)">
+      <p class="demo-subtitle">Paginación</p>
+      <app-pagination
+        [page]="currentPage()"
+        [totalPages]="24"
+        (pageChange)="currentPage.set($event)"
+      ></app-pagination>
+      <p style="font-size:12px; color:var(--color-text-muted); margin-top:var(--space-2); font-family:var(--font-mono)">
+        Página {{ currentPage() + 1 }} de 24
+      </p>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ══════════════════════════════════════════════════
+       COMPONENTES — FEEDBACK
+       ══════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <p class="section-module-label">Componentes — Feedback</p>
+    <h2 class="demo-title">Alertas y Notificaciones</h2>
+
+    <div class="demo-stack">
+      <app-alert variant="success" title="Orden ejecutada" message="BTC/USD · Compra 0.25 BTC a $98,420 · Ejecutada a las 14:32"></app-alert>
+      <app-alert variant="error"   title="Error al ejecutar" message="Fondos insuficientes. Margen disponible: $1,200 — requerido: $4,800"></app-alert>
+      <app-alert variant="warning" title="Margen bajo" message="Tu margen disponible está por debajo del 20%. Considera reducir exposición."></app-alert>
+      <app-alert variant="info"    title="Mantenimiento programado" message="El sistema estará en mantenimiento el domingo 12/04 de 02:00 a 04:00 UTC."></app-alert>
+      <app-alert variant="mint"    title="Nueva función disponible" message="El terminal avanzado con order book en tiempo real ya está disponible."></app-alert>
+    </div>
+
+    <div class="demo-row" style="margin-top: var(--space-6)">
+      <app-btn variant="primary"   size="sm" (btnClick)="toast.success('Orden ejecutada', 'BTC/USD · BUY 0.25 @ $98,420')">Toast Success</app-btn>
+      <app-btn variant="danger"    size="sm" (btnClick)="toast.error('Stop Loss activado', 'EUR/USD · SELL 5,000 @ 1.0812')">Toast Error</app-btn>
+      <app-btn variant="secondary" size="sm" (btnClick)="toast.info('Actualización', 'ETH/USD llegó a $3,900')">Toast Info</app-btn>
+      <app-btn variant="mint"      size="sm" (btnClick)="toast.mint('Depósito confirmado', '+$10,000.00 en tu cuenta')">Toast Mint</app-btn>
+      <app-btn variant="danger"    size="sm" (btnClick)="onDelete()">Modal Confirm</app-btn>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ══════════════════════════════════════════════════
+       COMPONENTES — PROGRESS & SKELETON
+       ══════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <p class="section-module-label">Componentes — Feedback</p>
+    <h2 class="demo-title">Progress Bar</h2>
+
+    <div class="demo-stack">
+      <app-progress-bar [value]="82" label="Carga de portfolio" size="lg"></app-progress-bar>
+      <app-progress-bar [value]="55" label="Verificación KYC" size="md"></app-progress-bar>
+      <app-progress-bar [value]="28" label="Sincronización" size="sm"></app-progress-bar>
+      <app-progress-bar [indeterminate]="true" label="Conectando al servidor..." [showPercent]="false"></app-progress-bar>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <section class="demo-section">
+    <p class="section-module-label">Componentes — Feedback</p>
+    <h2 class="demo-title">Skeleton Loaders</h2>
+
+    <div class="demo-row" style="align-items: flex-start">
+      <div style="width: 300px">
+        <app-skeleton type="text" [rows]="4"></app-skeleton>
+      </div>
+      <app-skeleton type="card"></app-skeleton>
+      <div style="width: 320px">
+        <app-skeleton type="table" [rows]="4"></app-skeleton>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ══════════════════════════════════════════════════
+       COMPONENTES — POPOVERS & TOOLTIPS
+       ══════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <p class="section-module-label">Componentes — Feedback</p>
+    <h2 class="demo-title">Popovers & Tooltips</h2>
+
+    <div class="demo-row">
+      <app-tooltip text="$98,420.00 · 09/04/2026">
+        <app-btn variant="ghost" size="sm">Ver precio</app-btn>
+      </app-tooltip>
+      <app-popover triggerText="Más info" content="BTC/USD · $98,420 · +2.34% hoy · Volumen 1.24M"></app-popover>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ══════════════════════════════════════════════════
+       COMPONENTES — DATA DISPLAY: CARDS
+       ══════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <p class="section-module-label">Componentes — Data Display</p>
+    <h2 class="demo-title">Cards</h2>
+
+    <div class="demo-row">
+      <app-card label="Portafolio total" value="$248,390" change="↑ +$3,084 hoy" changeType="pos"></app-card>
+      <app-card label="P&L realizado" value="$12,540" change="↑ +18.4% mes" changeType="pos"></app-card>
+      <app-card label="Margen libre" value="$84,200" change="34% del capital" changeType="mint"></app-card>
+      <app-card label="Drawdown" value="−$4,120" change="↓ −1.66%" changeType="neg"></app-card>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ══════════════════════════════════════════════════
+       COMPONENTES — DATA DISPLAY: LIST
+       ══════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <p class="section-module-label">Componentes — Data Display</p>
+    <h2 class="demo-title">Lists</h2>
+
+    <div class="demo-row" style="align-items: flex-start">
+      <app-list [items]="listItems"></app-list>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ══════════════════════════════════════════════════
+       COMPONENTES — DATA DISPLAY: TABLE
+       ══════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <p class="section-module-label">Componentes — Data Display</p>
+    <h2 class="demo-title">Data Table</h2>
+
+    <app-data-table
+      title="Posiciones Abiertas"
+      [config]="tableConfig"
+      [data]="tableData"
+      [totalItems]="tableData.length"
+      [pageSize]="10"
+      (rowAction)="onTableAction($event)"
+    ></app-data-table>
+
+    <div style="margin-top: var(--space-6)">
+      <h3 class="demo-subtitle">Empty State</h3>
+      <app-data-table
+        title="Historial"
+        [config]="tableConfig"
+        [data]="[]"
+        [totalItems]="0"
+        [pageSize]="10"
+      ></app-data-table>
+    </div>
+
+    <div style="margin-top: var(--space-6)">
+      <h3 class="demo-subtitle">Loading State</h3>
+      <app-data-table
+        title="Cargando..."
+        [config]="tableConfig"
+        [data]="[]"
+        [loading]="true"
+        [pageSize]="5"
+      ></app-data-table>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ══════════════════════════════════════════════════
+       COMPONENTES — DATA DISPLAY: TAGS & BADGES
+       ══════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <p class="section-module-label">Componentes — Data Display</p>
+    <h2 class="demo-title">Tags & Badges</h2>
+
+    <p class="demo-subtitle">Colores semánticos</p>
+    <div class="demo-row">
+      <app-tag variant="default">Default</app-tag>
+      <app-tag variant="mint">Mint</app-tag>
+      <app-tag variant="violet">Violet</app-tag>
+      <app-tag variant="success">Success</app-tag>
+      <app-tag variant="danger">Danger</app-tag>
+      <app-tag variant="warning">Warning</app-tag>
+      <app-tag variant="info">Info</app-tag>
+    </div>
+
+    <p class="demo-subtitle">Con dot indicador</p>
+    <div class="demo-row">
+      <app-tag variant="mint" [dot]="true">Activo</app-tag>
+      <app-tag variant="success" [dot]="true">Ejecutado</app-tag>
+      <app-tag variant="warning" [dot]="true">Pendiente</app-tag>
+      <app-tag variant="danger" [dot]="true">Error</app-tag>
+      <app-tag variant="default" [dot]="true">Cerrado</app-tag>
+    </div>
+
+    <p class="demo-subtitle">Removibles (chips)</p>
+    <div class="demo-row">
+      @for (tag of tags(); track tag) {
+        <app-tag variant="violet" [removable]="true" (removed)="removeTag(tag)">{{ tag }}</app-tag>
+      }
+    </div>
+
+    <p class="demo-subtitle">Badges</p>
+    <div class="demo-row">
+      <app-badge variant="buy">BUY</app-badge>
+      <app-badge variant="sell">SELL</app-badge>
+      <app-badge variant="pending">PENDING</app-badge>
+      <app-badge variant="active">OPEN</app-badge>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ══════════════════════════════════════════════════
+       COMPONENTES — DATA DISPLAY: ACCORDION
+       ══════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <p class="section-module-label">Componentes — Data Display</p>
+    <h2 class="demo-title">Accordion</h2>
+
+    <app-accordion [items]="accordionItems"></app-accordion>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ══════════════════════════════════════════════════
+       COMPONENTES — DATA DISPLAY: CHARTS
+       ══════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <p class="section-module-label">Componentes — Data Display</p>
+    <h2 class="demo-title">Chart Wrappers</h2>
+
+    <div class="demo-form-grid" style="max-width: 900px">
+      <app-chart-wrapper
+        title="BTC / USD"
+        subtitle="Bitcoin · Spot"
+        value="$98,420"
+        change="+2.34%"
+        [timeframes]="['1H','4H','1D','1S']"
+        activeTimeframe="4H"
+      >
+        <svg viewBox="0 0 400 100" preserveAspectRatio="none" fill="none" style="width:100%;height:100%">
+          <defs>
+            <linearGradient id="cLineG" x1="0" y1="0" x2="400" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#7C31C7"/><stop offset="100%" stop-color="#6D28D9"/></linearGradient>
+            <linearGradient id="cFillG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6D28D9" stop-opacity=".22"/><stop offset="100%" stop-color="transparent"/></linearGradient>
+          </defs>
+          <path d="M0 80 C40 75 70 68 100 58 C120 50 140 60 170 45 C190 32 210 38 240 22 C260 10 280 18 310 8 L400 4 L400 100 L0 100 Z" fill="url(#cFillG)"/>
+          <path d="M0 80 C40 75 70 68 100 58 C120 50 140 60 170 45 C190 32 210 38 240 22 C260 10 280 18 310 8 L400 4" stroke="url(#cLineG)" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="240" cy="22" r="4" fill="#5CF7CB"/>
+        </svg>
+      </app-chart-wrapper>
+
+      <app-chart-wrapper
+        title="P&L Acumulado"
+        subtitle="Este mes"
+        value="$12,540"
+        change="+18.4%"
+        [timeframes]="['7D','1M','3M']"
+        activeTimeframe="1M"
+      >
+        <svg viewBox="0 0 400 100" preserveAspectRatio="none" fill="none" style="width:100%;height:100%">
+          <defs>
+            <linearGradient id="areaG" x1="0" y1="0" x2="400" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="rgb(142,49,237)"/><stop offset="100%" stop-color="#22C55E"/></linearGradient>
+            <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22C55E" stop-opacity=".20"/><stop offset="100%" stop-color="transparent"/></linearGradient>
+          </defs>
+          <path d="M0 90 C30 85 60 80 90 72 C110 65 130 68 160 55 C180 44 200 50 230 38 C255 28 270 32 300 18 C320 8 350 14 380 6 L400 4 L400 100 L0 100 Z" fill="url(#areaFill)"/>
+          <path d="M0 90 C30 85 60 80 90 72 C110 65 130 68 160 55 C180 44 200 50 230 38 C255 28 270 32 300 18 C320 8 350 14 380 6 L400 4" stroke="url(#areaG)" stroke-width="2"/>
+        </svg>
+      </app-chart-wrapper>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════
+       COMPONENTES — LINKS
+       ══════════════════════════════════════════════════ -->
+  <div class="section-divider"></div>
+  <section class="demo-section">
+    <p class="section-module-label">Componentes — Acciones</p>
+    <h2 class="demo-title">Links</h2>
+
+    <div class="demo-row">
+      <app-link href="#">Ver historial completo</app-link>
+      <app-link href="#" variant="muted">Descargar extracto PDF</app-link>
+      <app-link href="#" [external]="true">Documentación API</app-link>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════
+       COMPONENTES — EMPTY STATES
+       ══════════════════════════════════════════════════ -->
+  <div class="section-divider"></div>
+  <section class="demo-section">
+    <p class="section-module-label">Componentes — Feedback</p>
+    <h2 class="demo-title">Empty States</h2>
+
+    <div class="demo-row" style="align-items: flex-start; gap: var(--space-8)">
+      <app-empty-state icon="📊" title="Sin posiciones abiertas" message="Aún no tienes operaciones activas. Empieza explorando el terminal." actionLabel="Abrir Terminal"></app-empty-state>
+      <app-empty-state icon="🔍" title="Sin resultados" message="No encontramos instrumentos. Prueba con otro término."></app-empty-state>
+    </div>
+  </section>
+
+  <div style="height: var(--space-24)"></div>
+</div>

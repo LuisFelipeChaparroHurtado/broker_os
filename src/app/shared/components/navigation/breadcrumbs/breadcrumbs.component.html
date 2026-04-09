@@ -1,0 +1,10 @@
+<nav class="ds-breadcrumb">
+  @for (item of items(); track item.label; let last = $last) {
+    @if (!last) {
+      <span class="ds-breadcrumb-item" (click)="onClick(item.link)">{{ item.label }}</span>
+      <span class="ds-breadcrumb-sep">›</span>
+    } @else {
+      <span class="ds-breadcrumb-current">{{ item.label }}</span>
+    }
+  }
+</nav>

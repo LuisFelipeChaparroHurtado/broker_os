@@ -1,0 +1,21 @@
+<div class="ds-chart-wrapper">
+  <div class="ds-chart-header">
+    <div>
+      <div class="ds-chart-title">{{ title() }}</div>
+      @if (subtitle()) { <div class="ds-chart-sub">{{ subtitle() }}</div> }
+    </div>
+    <div style="text-align:right">
+      @if (value()) { <div class="ds-chart-value">{{ value() }}</div> }
+      @if (change()) { <div class="ds-chart-change">{{ change() }}</div> }
+    </div>
+  </div>
+  <div class="ds-chart-area">
+    <ng-content></ng-content>
+  </div>
+  <div class="ds-chart-timeframes">
+    @for (tf of timeframes(); track tf) {
+      <button class="ds-tf-btn" [class.active]="activeTf() === tf"
+        (click)="selectTf(tf)">{{ tf }}</button>
+    }
+  </div>
+</div>

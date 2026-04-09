@@ -1,0 +1,9 @@
+<span style="position:relative; display:inline-flex"
+  (mouseenter)="show.set(true)" (mouseleave)="show.set(false)">
+  <ng-content></ng-content>
+  @if (show()) {
+    <div class="ds-tooltip" style="position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%); z-index:10">
+      {{ text() }}
+    </div>
+  }
+</span>

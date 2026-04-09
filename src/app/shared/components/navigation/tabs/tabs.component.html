@@ -1,0 +1,14 @@
+<div class="ds-tabs" [class.ds-tabs--pill]="variant() === 'pill'">
+  @for (tab of tabs(); track tab.key) {
+    <button class="ds-tab" [class.active]="active() === tab.key"
+      (click)="select(tab.key)">
+      {{ tab.label }}
+      @if (tab.badge) {
+        <span class="ds-tab-badge">{{ tab.badge }}</span>
+      }
+    </button>
+  }
+</div>
+<div class="ds-tab-content">
+  <ng-content></ng-content>
+</div>

@@ -1,0 +1,13 @@
+<textarea
+  [class]="textareaClasses()"
+  [placeholder]="placeholder()"
+  [rows]="rows()"
+  [attr.maxlength]="maxLength() || null"
+  [value]="internalValue()"
+  (input)="onInput($event)"
+  (focus)="onFocus()"
+  (blur)="onBlur()"
+></textarea>
+@if (charCountLabel()) {
+  <span class="ds-char-counter">{{ charCountLabel() }}</span>
+}

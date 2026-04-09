@@ -1,0 +1,9 @@
+<span style="position:relative; display:inline-block">
+  <span style="cursor:pointer; border-bottom:1px dashed var(--color-text-muted); color:var(--color-text-secondary); font-size:13px"
+    (click)="open.set(!open())">{{ triggerText() }}</span>
+  @if (open()) {
+    <div class="ds-popover" style="position:absolute; bottom:calc(100% + 12px); left:0; z-index:10">
+      {{ content() }}
+    </div>
+  }
+</span>

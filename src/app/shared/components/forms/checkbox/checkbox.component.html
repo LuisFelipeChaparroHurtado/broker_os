@@ -1,0 +1,16 @@
+<label class="ds-checkbox-item" (click)="toggle()">
+  <span [class]="boxClasses()">
+    @if (checked() && !indeterminate()) {
+      <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+        <path d="M1 4L4 7L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    }
+    @if (indeterminate()) {
+      <span style="width:8px;height:2px;background:#5CF7CB;border-radius:1px"></span>
+    }
+  </span>
+  @if (label()) {
+    <span class="ds-checkbox-label">{{ label() }}</span>
+  }
+  <ng-content></ng-content>
+</label>

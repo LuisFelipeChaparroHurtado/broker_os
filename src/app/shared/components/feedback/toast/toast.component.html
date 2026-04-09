@@ -1,0 +1,24 @@
+<div class="toast-outlet" aria-live="polite" aria-atomic="false">
+  @for (toast of toastService.toasts(); track toast.id) {
+    <div
+      class="ds-toast"
+      role="alert"
+    >
+      <span class="ds-toast-dot" [class]="dotClass(toast.variant)"></span>
+
+      <div class="ds-toast-body">
+        <div class="ds-toast-title">{{ toast.title }}</div>
+        @if (toast.message) {
+          <div class="ds-toast-sub">{{ toast.message }}</div>
+        }
+      </div>
+
+      <span
+        class="ds-toast-close"
+        role="button"
+        aria-label="Cerrar"
+        (click)="toastService.remove(toast.id)"
+      >&#x2715;</span>
+    </div>
+  }
+</div>

@@ -1,0 +1,16 @@
+<div class="ds-card">
+  <div class="ds-card-stat">
+    @if (label()) {
+      <span class="ds-card-stat-label">{{ label() }}</span>
+    }
+    @if (value()) {
+      <span class="ds-card-stat-value">{{ value() }}</span>
+    }
+    @if (change()) {
+      <span class="ds-card-stat-change" [class.ds-card-stat-change--pos]="changeType() === 'pos'"
+        [class.ds-card-stat-change--neg]="changeType() === 'neg'"
+        [class.ds-card-stat-change--mint]="changeType() === 'mint'">{{ change() }}</span>
+    }
+    <ng-content></ng-content>
+  </div>
+</div>

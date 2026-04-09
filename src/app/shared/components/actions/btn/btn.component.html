@@ -1,0 +1,21 @@
+<button
+  [type]="type()"
+  [class]="classes"
+  [disabled]="disabled() || loading()"
+  (click)="onClick($event)"
+>
+  <!-- Spinner cuando loading -->
+  @if (loading()) {
+    <span class="ds-spinner" aria-hidden="true"></span>
+  }
+
+  <!-- Icono opcional -->
+  @if (icon() && !loading()) {
+    <span aria-hidden="true">{{ icon() }}</span>
+  }
+
+  <!-- Contenido proyectado -->
+  @if (!iconOnly()) {
+    <ng-content></ng-content>
+  }
+</button>

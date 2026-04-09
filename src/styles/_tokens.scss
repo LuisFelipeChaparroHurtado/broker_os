@@ -1,0 +1,111 @@
+// ═══════════════════════════════════════════════════
+//  BROKER OS — Design Tokens
+//  Fuente: System-design-brokerOS-Final
+// ═══════════════════════════════════════════════════
+
+:root {
+  // ── Fondos ──────────────────────────────────────
+  --color-bg-page:      rgb(8, 7, 22);
+  --color-bg-surface:   rgb(18, 15, 38);
+  --color-bg-elevated:  rgba(100, 30, 210, 0.22);
+
+  // ── Accent — Violeta (primario) ─────────────────
+  --color-accent-200:   #C4B0FF;
+  --color-accent-400:   #6D28D9;
+  --color-accent-500:   rgb(142, 49, 237);
+  --color-accent-600:   #7C31C7;
+  --color-accent-900:   rgba(142, 49, 237, 0.28);
+
+  // ── Mint (secundario) ───────────────────────────
+  --color-mint-100:     #CFFFF4;
+  --color-mint-200:     #9AFCE4;
+  --color-mint-400:     #72FAD8;
+  --color-mint-500:     #5CF7CB;
+  --color-mint-700:     #1EDBA6;
+  --color-mint-900:     rgba(92, 247, 203, 0.12);
+
+  // ── Texto ────────────────────────────────────────
+  --color-text-primary:   #FFFFFF;
+  --color-text-secondary: rgba(240, 240, 252, 0.55);
+  --color-text-muted:     rgba(240, 240, 252, 0.30);
+
+  // ── Bordes ───────────────────────────────────────
+  --color-border-subtle:  rgba(255, 255, 255, 0.06);
+  --color-border-strong:  rgba(255, 255, 255, 0.14);
+
+  // ── Semánticos ───────────────────────────────────
+  --color-success:      #22C55E;
+  --color-success-bg:   rgba(34, 197, 94, 0.10);
+  --color-danger:       #EF4444;
+  --color-danger-bg:    rgba(239, 68, 68, 0.10);
+  --color-warning:      #F59E0B;
+  --color-warning-bg:   rgba(245, 158, 11, 0.10);
+  --color-info:         #38BDF8;
+  --color-info-bg:      rgba(56, 189, 248, 0.10);
+
+  // ── Fuentes ──────────────────────────────────────
+  --font-sans: 'Raleway', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  // ── Espaciado ────────────────────────────────────
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+
+  // ── Sombras ──────────────────────────────────────
+  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.50);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.60);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.70);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.75);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.85);
+
+  // ── Border Radius ─────────────────────────────────
+  --radius-none: 0px;
+  --radius-xs:   4px;
+  --radius-sm:   6px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-full: 9999px;
+
+  // ── Strokes ───────────────────────────────────────
+  --stroke-thin:   1px;
+  --stroke-base:   1.5px;
+  --stroke-medium: 2px;
+  --stroke-thick:  3px;
+
+  // ── Transiciones ──────────────────────────────────
+  --transition-fast:   100ms ease;
+  --transition-normal: 200ms ease;
+  --transition-slow:   350ms ease;
+}
+
+// ── Light Theme ──────────────────────────────────────
+[data-theme="light"] {
+  --color-bg-page:        #EEF0F5;
+  --color-bg-surface:     #F6F7FA;
+  --color-bg-elevated:    rgba(124, 19, 176, 0.05);
+  --color-text-primary:   #1A1D2E;
+  --color-text-secondary: #4A4D62;
+  --color-text-muted:     #7C7E90;
+  --color-border-subtle:  rgba(0, 0, 0, 0.08);
+  --color-border-strong:  rgba(0, 0, 0, 0.16);
+  --color-accent-200:     #F0D6FF;
+  --color-accent-400:     #7C13B0;
+  --color-accent-500:     #6B0F98;
+  --color-accent-600:     #5A0C80;
+  --color-accent-900:     rgba(124, 19, 176, 0.10);
+  --color-mint-500:       #1EDBA6;
+  --color-mint-700:       #0A7A55;
+  --shadow-xs: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --shadow-xl: 0 16px 48px rgba(0,0,0,0.16);
+}

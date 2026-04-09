@@ -1,0 +1,22 @@
+<div class="ds-select-wrapper">
+  <select
+    [class]="selectClasses()"
+    [disabled]="disabled()"
+    [value]="internalValue()"
+    (change)="onSelect($event)"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+  >
+    <option value="" disabled [selected]="!internalValue()">{{ placeholder() }}</option>
+    @for (opt of options(); track opt.value) {
+      <option
+        [value]="opt.value"
+        [disabled]="opt.disabled ?? false"
+        [selected]="opt.value === internalValue()"
+      >
+        {{ opt.label }}
+      </option>
+    }
+  </select>
+  <span class="ds-select-chevron" aria-hidden="true">&#x25BE;</span>
+</div>

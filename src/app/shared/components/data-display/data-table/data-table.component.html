@@ -1,0 +1,92 @@
+<div class="ds-table-wrapper">
+  <!-- Header -->
+  @if (title()) {
+    <div class="ds-table-header">
+      <span class="ds-table-title">{{ title() }}</span>
+    </div>
+  }
+
+  <!-- Skeleton -->
+  @if (loading()) {
+    <app-skeleton type="table" [rows]="pageSize()"></app-skeleton>
+  }
+
+  <!-- Empty -->
+  @if (isEmpty()) {
+    <app-empty-state
+      [title]="config().emptyTitle ?? 'Sin datos'"
+      [message]="config().emptyMessage ?? 'No hay registros para los filtros actuales'"
+    ></app-empty-state>
+  }
+
+  <!-- Table -->
+  @if (!loading() && !isEmpty()) {
+    <table class="ds-table" aria-live="polite">
+      <caption class="sr-only">{{ title() }}</caption>
+
+      <thead>
+        <tr>
+          @for (col of config().columns; track col.key) {
+            <th
+              [style.width]="col.width ?? null"
+              [style.text-align]="col.align ?? 'left'"
+              [class]="sortClass(col.key)"
+              (click)="col.sortable ? onSort(col.key) : null"
+            >{{ col.header }}</th>
+          }
+          @if (config().rowActions?.length) {
+            <th style="width:48px"></th>
+          }
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (row of data(); track trackByFn($index, row)) {
+          <tr>
+            @for (col of config().columns; track col.key) {
+              <td [style.text-align]="col.align ?? 'left'">
+                <!-- Badge cells -->
+                @if (col.type === 'badge-buy') {
+                  <span class="ds-badge-sm ds-badge-buy">{{ row[col.key] }}</span>
+                } @else if (col.type === 'badge-sell') {
+                  <span class="ds-badge-sm ds-badge-sell">{{ row[col.key] }}</span>
+                } @else if (col.type === 'badge-pending') {
+                  <span class="ds-badge-sm ds-badge-pending">{{ row[col.key] }}</span>
+                } @else if (col.type === 'badge-active') {
+                  <span class="ds-badge-sm ds-badge-active">{{ row[col.key] }}</span>
+                } @else {
+                  <!-- Typed cells -->
+                  <span [class]="cellClass(col.type)">{{ row[col.key] }}</span>
+                }
+              </td>
+            }
+
+            <!-- Row actions -->
+            @if (config().rowActions?.length) {
+              <td style="text-align:right">
+                <app-menu
+                  [items]="rowMenuItems(config().rowActions!)"
+                  triggerLabel=""
+                  triggerIcon="&#x22EF;"
+                  placement="bottom-right"
+                  (menuAction)="onRowAction($event, row)"
+                ></app-menu>
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  <!-- Pagination -->
+  @if (!loading() && totalPages() > 1) {
+    <div class="table-pagination">
+      <app-pagination
+        [page]="currentPage()"
+        [totalPages]="totalPages()"
+        (pageChange)="onPage($event)"
+      ></app-pagination>
+    </div>
+  }
+</div>

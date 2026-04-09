@@ -1,0 +1,16 @@
+<div class="ds-list">
+  @for (item of items(); track item.name; let i = $index) {
+    <div class="ds-list-item" (click)="itemClick.emit(i)">
+      <div class="ds-list-avatar">{{ item.avatar || item.name.charAt(0) }}</div>
+      <div class="ds-list-body">
+        <div class="ds-list-name">{{ item.name }}</div>
+        @if (item.sub) {
+          <div class="ds-list-sub">{{ item.sub }}</div>
+        }
+      </div>
+      @if (item.value) {
+        <span class="ds-list-value" [class]="item.valueClass || ''">{{ item.value }}</span>
+      }
+    </div>
+  }
+</div>

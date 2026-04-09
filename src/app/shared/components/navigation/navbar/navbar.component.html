@@ -1,0 +1,12 @@
+<div class="ds-navbar">
+  <span class="ds-navbar-brand">{{ brand() }}</span>
+  <nav class="ds-navbar-nav">
+    @for (item of items(); track item.key) {
+      <span class="ds-navbar-item" [class.active]="item.active"
+        (click)="onNav(item.key)">{{ item.label }}</span>
+    }
+  </nav>
+  <div class="ds-navbar-actions">
+    <ng-content></ng-content>
+  </div>
+</div>

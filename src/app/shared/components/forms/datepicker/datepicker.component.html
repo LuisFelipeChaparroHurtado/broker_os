@@ -1,0 +1,21 @@
+<div class="ds-datepicker">
+  <div class="ds-datepicker-header">
+    <button class="ds-datepicker-nav" (click)="prevMonth()">‹</button>
+    <span class="ds-datepicker-month">{{ monthLabel() }}</span>
+    <button class="ds-datepicker-nav" (click)="nextMonth()">›</button>
+  </div>
+  <div class="ds-datepicker-grid">
+    @for (d of ['Lu','Ma','Mi','Ju','Vi','Sa','Do']; track d) {
+      <span class="ds-datepicker-dow">{{ d }}</span>
+    }
+    @for (day of days(); track $index) {
+      <span class="ds-datepicker-day"
+        [class.ds-datepicker-day--today]="day.isToday"
+        [class.ds-datepicker-day--selected]="day.isSelected"
+        [class.ds-datepicker-day--other-month]="day.isOtherMonth"
+        (click)="selectDay(day)">
+        {{ day.num }}
+      </span>
+    }
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="ds-input-wrapper">
+  @if (iconLeft()) {
+    <span class="ds-input-icon-left" aria-hidden="true">{{ iconLeft() }}</span>
+  }
+
+  <input
+    [type]="type()"
+    [class]="inputClasses()"
+    [placeholder]="placeholder()"
+    [value]="internalValue()"
+    [disabled]="state() === 'disabled'"
+    [style.padding-left]="iconLeft() ? '40px' : null"
+    (input)="onInput($event)"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+  />
+
+  @if (iconRight()) {
+    <span class="ds-input-icon-right" aria-hidden="true">{{ iconRight() }}</span>
+  }
+</div>

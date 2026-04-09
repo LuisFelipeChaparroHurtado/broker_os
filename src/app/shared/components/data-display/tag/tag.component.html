@@ -1,0 +1,6 @@
+<span [class]="classes()">
+  <ng-content></ng-content>
+  @if (removable()) {
+    <span class="ds-tag-x" (click)="removed.emit()">&#x2715;</span>
+  }
+</span>

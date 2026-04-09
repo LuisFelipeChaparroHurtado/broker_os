@@ -1,0 +1,19 @@
+<div class="ds-radio-group" role="radiogroup">
+  @for (opt of options(); track opt.value) {
+    <label
+      class="ds-radio-item"
+      (click)="select(opt.value)"
+    >
+      <span
+        class="ds-radio-circle"
+        [class.ds-radio-circle--selected]="selected() === opt.value"
+        [class.ds-radio-circle--disabled]="opt.disabled || disabled()"
+      >
+        @if (selected() === opt.value) {
+          <span class="ds-radio-dot"></span>
+        }
+      </span>
+      <span class="ds-radio-label">{{ opt.label }}</span>
+    </label>
+  }
+</div>

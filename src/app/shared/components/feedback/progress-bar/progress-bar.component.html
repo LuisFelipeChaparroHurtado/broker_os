@@ -1,0 +1,25 @@
+<div class="ds-progress-wrapper">
+  @if (label() || showPercent()) {
+    <div class="ds-progress-label">
+      @if (label()) {
+        <span class="ds-progress-name">{{ label() }}</span>
+      }
+      @if (showPercent() && !indeterminate()) {
+        <span class="ds-progress-pct">{{ clampedValue() }}%</span>
+      }
+    </div>
+  }
+
+  <div
+    [class]="trackClasses()"
+    role="progressbar"
+    [attr.aria-valuenow]="indeterminate() ? null : clampedValue()"
+    [attr.aria-valuemin]="0"
+    [attr.aria-valuemax]="100"
+  >
+    <div
+      class="ds-progress-fill"
+      [style.width.%]="indeterminate() ? null : clampedValue()"
+    ></div>
+  </div>
+</div>

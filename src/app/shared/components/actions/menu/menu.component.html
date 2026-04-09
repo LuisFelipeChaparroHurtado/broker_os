@@ -1,0 +1,44 @@
+<div class="menu-host">
+  <!-- Trigger -->
+  <button
+    class="ds-btn ds-btn--ghost ds-btn--sm"
+    type="button"
+    [attr.aria-expanded]="open()"
+    (click)="toggle()"
+  >
+    <span>{{ triggerIcon() }}</span>
+    @if (triggerLabel()) {
+      <span>{{ triggerLabel() }}</span>
+    }
+  </button>
+
+  <!-- Panel -->
+  @if (open()) {
+    <div
+      class="ds-menu"
+      [class.menu--right]="placement() === 'bottom-right'"
+      role="menu"
+    >
+      @for (item of items(); track item.label) {
+        @if (item.divider) {
+          <!-- Divider -->
+          <div class="ds-menu-divider"></div>
+        } @else {
+          <!-- Item -->
+          <div
+            class="ds-menu-item"
+            [class.ds-menu-item--danger]="item.danger"
+            [class.ds-menu-item--disabled]="item.disabled"
+            role="menuitem"
+            (click)="select(item)"
+          >
+            @if (item.icon) {
+              <span aria-hidden="true">{{ item.icon }}</span>
+            }
+            {{ item.label }}
+          </div>
+        }
+      }
+    </div>
+  }
+</div>

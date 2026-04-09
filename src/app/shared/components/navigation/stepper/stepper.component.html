@@ -1,0 +1,19 @@
+<div class="ds-stepper">
+  @for (step of steps(); track step.label; let i = $index; let last = $last) {
+    <div class="ds-step"
+      [class.ds-step--completed]="i < activeStep()"
+      [class.ds-step--active]="i === activeStep()">
+      @if (!last) {
+        <div class="ds-step-connector"></div>
+      }
+      <div class="ds-step-circle">
+        @if (i < activeStep()) {
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        } @else {
+          {{ i + 1 }}
+        }
+      </div>
+      <span class="ds-step-label">{{ step.label }}</span>
+    </div>
+  }
+</div>

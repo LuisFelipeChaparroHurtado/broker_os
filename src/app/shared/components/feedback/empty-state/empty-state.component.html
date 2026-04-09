@@ -1,0 +1,14 @@
+<div class="ds-empty-state">
+  <div class="ds-empty-icon" aria-hidden="true">{{ icon() }}</div>
+  <p class="ds-empty-title">{{ title() }}</p>
+  @if (message()) {
+    <p class="ds-empty-text">{{ message() }}</p>
+  }
+
+  @if (actionLabel()) {
+    <button
+      class="ds-btn ds-btn--primary ds-btn--sm"
+      (click)="action.emit()"
+    >{{ actionLabel() }}</button>
+  }
+</div>

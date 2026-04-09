@@ -1,0 +1,31 @@
+<nav class="ds-pagination" aria-label="Paginaci&oacute;n">
+  <!-- Anterior -->
+  <button
+    class="ds-page-btn ds-page-btn--nav"
+    [disabled]="page() === 0"
+    (click)="prev()"
+    aria-label="P&aacute;gina anterior"
+  >&#x2039;</button>
+
+  <!-- P&aacute;ginas -->
+  @for (p of pages(); track $index) {
+    @if (p === '...') {
+      <span class="ds-page-dots">&hellip;</span>
+    } @else {
+      <button
+        class="ds-page-btn"
+        [class.active]="p === page()"
+        [attr.aria-current]="p === page() ? 'page' : null"
+        (click)="goTo(p)"
+      >{{ +p + 1 }}</button>
+    }
+  }
+
+  <!-- Siguiente -->
+  <button
+    class="ds-page-btn ds-page-btn--nav"
+    [disabled]="page() === totalPages() - 1"
+    (click)="next()"
+    aria-label="P&aacute;gina siguiente"
+  >&#x203A;</button>
+</nav>
