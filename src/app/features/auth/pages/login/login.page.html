@@ -1,0 +1,32 @@
+<div class="login-wrapper">
+  <app-brand-panel></app-brand-panel>
+
+  <section class="form-panel">
+    <div class="login-card">
+      <!-- Step Indicator -->
+      <div class="step-indicator">
+        <div class="step-dot" [class.active]="currentStep() === 1" [class.completed]="currentStep() === 2"></div>
+        <div class="step-dot" [class.active]="currentStep() === 2"></div>
+      </div>
+
+      <!-- Step 1: Credentials -->
+      @if (currentStep() === 1) {
+        <app-login-form
+          [isLoading]="isLoading()"
+          [errorMessage]="errorMessage()"
+          (submitForm)="onLogin($event)"
+        ></app-login-form>
+      }
+
+      <!-- Step 2: 2FA -->
+      @if (currentStep() === 2) {
+        <app-tfa-form
+          [isLoading]="isLoading()"
+          [errorMessage]="errorMessage()"
+          (submitCode)="onVerify2FA($event)"
+          (backToLogin)="onBackToLogin()"
+        ></app-tfa-form>
+      }
+    </div>
+  </section>
+</div>

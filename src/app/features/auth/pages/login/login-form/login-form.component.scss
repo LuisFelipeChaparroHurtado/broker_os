@@ -1,0 +1,43 @@
+:host { display: block; }
+
+// Solo layout — los estilos vienen de los componentes DS
+
+.field-group { margin-bottom: 22px; }
+
+.password-wrapper { position: relative; }
+
+.password-toggle {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+  z-index: 2;
+
+  &:hover { color: var(--color-text-secondary); }
+  svg { width: 18px; height: 18px; }
+  .icon-eye-off { display: none; }
+  &.active .icon-eye { display: none; }
+  &.active .icon-eye-off { display: block; }
+}
+
+.form-extras {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.register-text {
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin-top: 24px;
+}

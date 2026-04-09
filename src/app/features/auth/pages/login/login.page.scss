@@ -1,0 +1,88 @@
+:host { display: block; height: 100vh; overflow: hidden; }
+
+.login-wrapper {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.form-panel {
+  flex: 0 0 45%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 40px;
+  position: relative;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 460px;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 48px 44px;
+  box-shadow: var(--shadow-lg);
+  animation: cardEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+  transform: translateY(20px);
+  overflow: hidden;
+  position: relative;
+}
+
+@keyframes cardEntrance {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.step-dot {
+  width: 24px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--color-border-strong);
+  transition: all 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.step-dot.active {
+  background: linear-gradient(135deg, rgb(142,49,237), #1EDBA6);
+  width: 32px;
+}
+
+.step-dot.completed {
+  background: #5CF7CB;
+  width: 24px;
+}
+
+@media (max-width: 900px) {
+  .form-panel { flex: 1; }
+  .login-card { max-width: 460px; }
+}
+
+@media (max-width: 480px) {
+  .form-panel { padding: 24px 20px; }
+  .login-card { padding: 32px 24px; }
+}
+
+// Light theme
+:host-context([data-theme="light"]) {
+  .login-card {
+    background: #FFFFFF;
+    border-color: rgba(0,0,0,0.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  }
+  .step-dot.active {
+    background: linear-gradient(135deg, #6B0F98, #0A7A55);
+  }
+  .step-dot.completed {
+    background: var(--color-mint-700);
+  }
+}

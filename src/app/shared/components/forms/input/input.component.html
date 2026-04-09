@@ -1,6 +1,8 @@
 <div class="ds-input-wrapper">
   @if (iconLeft()) {
     <span class="ds-input-icon-left" aria-hidden="true">{{ iconLeft() }}</span>
+  } @else {
+    <ng-content select="[slot=icon-left]"></ng-content>
   }
 
   <input
@@ -9,7 +11,6 @@
     [placeholder]="placeholder()"
     [value]="internalValue()"
     [disabled]="state() === 'disabled'"
-    [style.padding-left]="iconLeft() ? '40px' : null"
     (input)="onInput($event)"
     (focus)="onFocus()"
     (blur)="onBlur()"
@@ -17,5 +18,9 @@
 
   @if (iconRight()) {
     <span class="ds-input-icon-right" aria-hidden="true">{{ iconRight() }}</span>
+  } @else {
+    <ng-content select="[slot=icon-right]"></ng-content>
   }
+
+  <ng-content></ng-content>
 </div>

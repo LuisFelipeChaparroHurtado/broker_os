@@ -1,6 +1,6 @@
-# Prompt: Generate Module (Feature completa)
+# Prompt: Generar Componente dentro de `auth/login`
 
-Usa este prompt cuando necesites generar una feature completa de Angular desde cero.
+Usa este prompt cuando necesites agregar un **nuevo componente** dentro de una feature de autenticación ya existente (`features/auth/login`).
 
 ---
 
@@ -8,57 +8,64 @@ Usa este prompt cuando necesites generar una feature completa de Angular desde c
 
 Copia y pega el bloque de abajo, reemplazando los valores entre `< >`:
 
-```
-Genera una feature Angular completa para el módulo "<NOMBRE_FEATURE>".
+````
+Genera un nuevo componente Angular dentro de la feature `auth/login`.
 
 ## Contexto del proyecto
 Lee y aplica:
-- claude/context/project-overview.md      ← dominio y stack
-- claude/context/api-contracts.md         ← endpoints disponibles
-- claude/context/ui-guidelines.md         ← design tokens y patrones UI
-- claude/skills/angular-architecture.md   ← estructura de carpetas
-- claude/skills/angular-services.md       ← patrón API service + Store
-- claude/skills/angular-state.md          ← signals y estado
-- claude/skills/angular-components.md     ← reglas de componentes
-- claude/skills/angular-best-practices.md ← convenciones y tipos
+- claude/context/project-overview.md
+- claude/context/ui-guidelines.md
+- claude/skills/angular-architecture.md
+- claude/skills/angular-components.md
+- claude/skills/angular-best-practices.md
 
-## Feature a generar
-Nombre: <NOMBRE_FEATURE>
-Descripción: <QUÉ HACE ESTA FEATURE>
+## Componente a generar
+Nombre: <NOMBRE_COMPONENTE>
+Ruta destino: `src/app/features/auth/login/components/<nombre-componente>/`
+Descripción: <QUÉ HACE ESTE COMPONENTE>
 
-## Entidad principal
+## Tipo de componente
+<!-- Marca con X el que aplica -->
+- [ ] Presentacional (solo recibe inputs y emite outputs — sin lógica de negocio)
+- [ ] Contenedor (consume store/service directamente)
+- [ ] Formulario (usa ReactiveFormsModule o app-dynamic-form)
+
+## Inputs esperados
 ```typescript
-interface <ENTIDAD> {
-  // pegar o describir la interfaz aquí
-}
+// Ejemplo:
+email    : InputSignal<string>
+isLoading: InputSignal<boolean>
+````
+
+## Outputs esperados
+
+```typescript
+// Ejemplo:
+submitForm: OutputEmitterRef<LoginFormValue>;
+forgotPassword: OutputEmitterRef<void>;
 ```
 
-## Endpoints que usa
-- GET  <ENDPOINT>  → lista paginada
-- POST <ENDPOINT>  → crear
-- DELETE <ENDPOINT>/:id → eliminar
+## Template / comportamiento esperado
 
-## Pantallas requeridas
-1. Lista: tabla con filtros, paginación y acciones por fila
-2. Detalle: vista de un item (modal o página separada)
-3. Formulario: crear/editar el item
+<DESCRIPCIÓN BREVE DEL HTML QUE DEBE RENDERIZAR>
 
 ## Archivos a generar (en orden)
-1. `src/app/features/<nombre>/models/<nombre>.model.ts`
-2. `src/app/features/<nombre>/services/<nombre>-api.service.ts`
-3. `src/app/features/<nombre>/store/<nombre>.store.ts`
-4. `src/app/features/<nombre>/pages/<nombre>-list/<nombre>-list.page.ts` + .html + .scss
-5. `src/app/features/<nombre>/pages/<nombre>-list/<nombre>-list.page.spec.ts`
-6. `src/app/features/<nombre>/<nombre>.routes.ts`
+
+1. `src/app/features/auth/login/components/<nombre>/<nombre>.component.ts`
+2. `src/app/features/auth/login/components/<nombre>/<nombre>.component.html`
+3. `src/app/features/auth/login/components/<nombre>/<nombre>.component.scss`
+4. `src/app/features/auth/login/components/<nombre>/<nombre>.component.spec.ts`
 
 ## Reglas obligatorias
-- Todos los componentes: standalone: true + ChangeDetectionStrategy.OnPush
-- Sin any — TypeScript estricto
-- Inputs con input() signal, outputs con output()
-- La tabla debe usar app-data-table de shared/components con TableConfig
-- El formulario debe usar app-dynamic-form de shared/components con FormConfig
-- Estados: loading, error, empty siempre implementados
-- Genera código completo y funcional — no esqueletos vacíos
+
+- `standalone: true` + `ChangeDetectionStrategy.OnPush`
+- Sin `any` — TypeScript estricto
+- Inputs con `input()` signal, outputs con `output()`
+- Sin lógica de negocio en componentes presentacionales
+- Estilos solo con variables de `ui-guidelines.md` (design tokens)
+- Spec con al menos: render, inputs, outputs y snapshot
+- Código completo y funcional — sin esqueletos vacíos
+
 ```
 
 ---
@@ -66,38 +73,48 @@ interface <ENTIDAD> {
 ## Ejemplo de invocación real
 
 ```
-Genera una feature Angular completa para el módulo "orders".
+
+Genera un nuevo componente Angular dentro de la feature `auth/login`.
 
 ## Contexto del proyecto
+
 [ver archivos arriba]
 
-## Feature a generar
-Nombre: orders
-Descripción: Gestión de órdenes pendientes (limit y stop-limit). Permite ver, crear y cancelar órdenes que aún no se han ejecutado.
+## Componente a generar
 
-## Entidad principal
-interface Order {
-  id:        string;
-  symbol:    string;
-  side:      'BUY' | 'SELL';
-  type:      'LIMIT' | 'STOP_LIMIT';
-  price:     number;
-  quantity:  number;
-  status:    'PENDING' | 'TRIGGERED' | 'CANCELLED';
-  createdAt: string;
-}
+Nombre: login-form
+Ruta destino: `src/app/features/auth/login/components/login-form/`
+Descripción: Formulario de inicio de sesión con campos email y password, botón submit y enlace "¿Olvidaste tu contraseña?".
 
-## Endpoints que usa
-- GET    /orders          → lista paginada (OrderFilters)
-- POST   /orders          → crear (CreateOrderDto)
-- DELETE /orders/:id      → cancelar
+## Tipo de componente
 
-## Pantallas requeridas
-1. Lista: tabla con símbolo, tipo, precio, cantidad, estado y botón cancelar
-2. Formulario: modal para crear nueva orden (symbol, side, type, price, quantity)
+- [x] Formulario (usa ReactiveFormsModule)
+
+## Inputs esperados
+
+isLoading: InputSignal<boolean>
+errorMessage: InputSignal<string | null>
+
+## Outputs esperados
+
+submitForm: OutputEmitterRef<{ email: string; password: string }>
+forgotPassword: OutputEmitterRef<void>
+
+## Template / comportamiento esperado
+
+- Campo email con validación required + email
+- Campo password con validación required + minLength(8) + toggle show/hide
+- Botón "Iniciar sesión" deshabilitado mientras isLoading sea true
+- Mensaje de error visible si errorMessage no es null
+- Link "¿Olvidaste tu contraseña?" que emite forgotPassword
 
 ## Archivos a generar
-[listado completo arriba]
+
+1. src/app/features/auth/login/components/login-form/login-form.component.ts
+2. src/app/features/auth/login/components/login-form/login-form.component.html
+3. src/app/features/auth/login/components/login-form/login-form.component.scss
+4. src/app/features/auth/login/components/login-form/login-form.component.spec.ts
+
 ```
 
 ---
@@ -106,12 +123,14 @@ interface Order {
 
 Antes de aceptar el código generado, verificar:
 
-- [ ] Todos los archivos listados están generados
-- [ ] `standalone: true` en todos los componentes
-- [ ] `ChangeDetectionStrategy.OnPush` en todos
-- [ ] El store tiene `_state` privado y selectores públicos readonly
-- [ ] El API service solo hace HTTP y devuelve `Observable<T>` — sin subscribe
-- [ ] La tabla usa `TableConfig<Order>` con `app-data-table`
-- [ ] El formulario usa `FormConfig<CreateOrderDto>` con `app-dynamic-form`
-- [ ] Los 4 estados UI están implementados (loading, error, empty, data)
-- [ ] Las rutas están en `orders.routes.ts` con lazy loading
+- [ ] Los 4 archivos están generados (`.ts`, `.html`, `.scss`, `.spec.ts`)
+- [ ] `standalone: true` declarado en el decorador
+- [ ] `ChangeDetectionStrategy.OnPush` aplicado
+- [ ] Todos los inputs usan `input<T>()` (signal API)
+- [ ] Todos los outputs usan `output<T>()`
+- [ ] Sin lógica de negocio si es presentacional (sin llamadas a servicios ni store)
+- [ ] El `.scss` usa solo design tokens del proyecto
+- [ ] El `.spec.ts` cubre: render básico, binding de inputs, emisión de outputs
+- [ ] No hay `any` en ningún archivo
+- [ ] El componente está exportado y listo para importarse en `login.page.ts`
+```

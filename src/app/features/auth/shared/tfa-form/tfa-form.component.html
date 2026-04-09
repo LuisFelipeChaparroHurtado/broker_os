@@ -1,0 +1,61 @@
+<h2 class="login-heading">Verificación 2FA</h2>
+<p class="login-subtitle">Ingresa el código de 6 dígitos de tu app de autenticación</p>
+
+<!-- Shield Icon -->
+<div class="shield-icon-wrapper">
+  <div class="shield-glow"></div>
+  <div class="shield-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      <polyline points="9 12 11 14 15 10"/>
+    </svg>
+  </div>
+</div>
+
+<!-- Error -->
+@if (errorMessage()) {
+  <app-alert variant="error" [title]="errorMessage()!" message="" style="margin-bottom: var(--space-4)"></app-alert>
+}
+
+<!-- 6 Digit Inputs -->
+<div class="code-inputs" [class.all-filled]="allFilled" [class.shake]="shaking()">
+  @for (digit of digits(); track $index) {
+    <input #codeInput
+      type="text"
+      inputmode="numeric"
+      maxlength="1"
+      class="code-input"
+      [class.filled]="digit !== ''"
+      [value]="digit"
+      (input)="onDigitInput($index, $event)"
+      (keydown)="onKeyDown($index, $event)"
+      (paste)="onPaste($event)">
+  }
+</div>
+
+<!-- Resend -->
+<div class="resend-section">
+  <p class="resend-text">¿No recibiste el código?</p>
+  @if (canResend()) {
+    <app-link href="#" (click)="onResend(); $event.preventDefault()">Reenviar código</app-link>
+  } @else {
+    <span class="countdown-text">Reenviar en {{ countdown() }}s</span>
+  }
+</div>
+
+<!-- Verify Button -->
+<app-btn
+  variant="gradient"
+  size="lg"
+  [full]="true"
+  [loading]="isLoading()"
+  [disabled]="!allFilled || isLoading()"
+  (btnClick)="submitCode.emit(digits().join(''))"
+>
+  Verificar
+</app-btn>
+
+<!-- Back -->
+<div class="back-link">
+  <app-link href="#" variant="muted" (click)="backToLogin.emit(); $event.preventDefault()">← Volver al login</app-link>
+</div>
