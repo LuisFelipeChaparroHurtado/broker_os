@@ -1,17 +1,21 @@
-import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
 import { BrandPanelComponent } from '../../shared/brand-panel/brand-panel.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { TfaFormComponent } from '../../shared/tfa-form/tfa-form.component';
+import { ThemeToggleComponent } from '../../../../shared/components/theme-toggle/theme-toggle.component';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [BrandPanelComponent, LoginFormComponent, TfaFormComponent],
+  imports: [BrandPanelComponent, LoginFormComponent, TfaFormComponent,ThemeToggleComponent],
   templateUrl: './login.page.html',
   styleUrl: './login.page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginPageComponent {
+  private readonly router = inject(Router);
   readonly currentStep = signal<1 | 2>(1);
   readonly isLoading = signal(false);
   readonly errorMessage = signal<string | null>(null);
@@ -43,5 +47,9 @@ export class LoginPageComponent {
   onBackToLogin(): void {
     this.currentStep.set(1);
     this.errorMessage.set(null);
+  }
+
+  onRegisterLink(): void {
+    this.router.navigate(['/auth/register']);
   }
 }

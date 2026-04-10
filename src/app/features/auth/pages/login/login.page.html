@@ -15,6 +15,7 @@
           [isLoading]="isLoading()"
           [errorMessage]="errorMessage()"
           (submitForm)="onLogin($event)"
+          (register)="onRegisterLink()"
         ></app-login-form>
       }
 
@@ -30,3 +31,4 @@
     </div>
   </section>
 </div>
+<app-theme-toggle></app-theme-toggle>

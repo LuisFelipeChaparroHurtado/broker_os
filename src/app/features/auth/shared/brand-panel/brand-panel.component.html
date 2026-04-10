@@ -1,5 +1,6 @@
-<section class="brand-panel">
+<section class="brand-panel" aria-label="Broker OS Brand">
   <div class="brand-panel-border"></div>
+
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
@@ -18,24 +19,41 @@
 
   <div class="brand-center">
     <h1 class="brand-tagline">
-      Acceso seguro<br>a tu <span class="accent">cuenta</span>
+      {{ taglinePre() }}<br>{{ taglineMid() }}<span class="accent">{{ taglineAccent() }}</span>
     </h1>
-    <p class="brand-subtitle">
-      Protegemos tu cuenta con autenticación de dos factores, cifrado de grado militar y sesiones seguras.
-    </p>
+    <p class="brand-subtitle">{{ subtitle() }}</p>
     <div class="feature-pills">
-      <div class="feature-pill">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Autenticación 2FA
-      </div>
-      <div class="feature-pill">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        Cifrado AES-256
-      </div>
-      <div class="feature-pill">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-        Sesiones protegidas
-      </div>
+      @for (pill of pills(); track pill.label) {
+        <div class="feature-pill">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            @switch (pill.icon) {
+              @case ('shield') {
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              }
+              @case ('lock') {
+                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              }
+              @case ('clock') {
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+              }
+              @case ('check-circle') {
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              }
+              @case ('dollar') {
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              }
+              @case ('chat') {
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              }
+            }
+          </svg>
+          {{ pill.label }}
+        </div>
+      }
     </div>
   </div>
 

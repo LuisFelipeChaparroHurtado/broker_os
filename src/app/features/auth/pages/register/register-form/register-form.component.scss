@@ -1,0 +1,152 @@
+:host { display: block; }
+
+// ── Layout helpers ────────────────────────────────────────────────────────────
+.field-group { margin-bottom: var(--space-4); }
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+
+  .field-group { margin-bottom: 0; }
+}
+
+.form-row--phone {
+  grid-template-columns: 140px 1fr;
+}
+
+// ── Label ─────────────────────────────────────────────────────────────────────
+.ds-label {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-1);
+  letter-spacing: 0.2px;
+}
+
+// ── Password toggle button ────────────────────────────────────────────────────
+.password-wrapper { position: relative; }
+
+.password-toggle {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: color var(--transition-fast);
+  z-index: 2;
+
+  &:hover { color: var(--color-text-secondary); }
+
+  svg { width: 18px; height: 18px; }
+
+  .icon-eye-off { display: none; }
+  &.active .icon-eye     { display: none; }
+  &.active .icon-eye-off { display: block; }
+}
+
+// ── Password strength meter ───────────────────────────────────────────────────
+.strength-meter {
+  display: flex;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+
+  .strength-segment {
+    flex: 1;
+    height: 3px;
+    border-radius: var(--radius-full);
+    background: var(--color-border-strong);
+    transition: background var(--transition-normal);
+  }
+
+  &--weak   .strength-segment.active { background: var(--color-danger); }
+  &--fair   .strength-segment.active { background: var(--color-warning); }
+  &--good   .strength-segment.active { background: #84CC16; }
+  &--strong .strength-segment.active { background: var(--color-success); }
+}
+
+.strength-label {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: var(--space-1);
+  letter-spacing: 0.3px;
+
+  &--weak   { color: var(--color-danger); }
+  &--fair   { color: var(--color-warning); }
+  &--good   { color: #84CC16; }
+  &--strong { color: var(--color-success); }
+}
+
+// ── Match indicator ───────────────────────────────────────────────────────────
+.match-indicator {
+  position: absolute;
+  right: 48px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  z-index: 2;
+  pointer-events: none;
+
+  &.match    { color: var(--color-success); }
+  &.no-match { color: var(--color-danger); }
+}
+
+// ── Terms row ─────────────────────────────────────────────────────────────────
+.terms-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+
+  &--error {
+    background: var(--color-danger-bg);
+    outline: var(--stroke-thin) solid var(--color-danger);
+  }
+}
+
+.terms-label {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  padding-top: 2px;
+}
+
+.ds-link {
+  color: var(--color-accent-200);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--transition-fast);
+
+  &:hover { color: var(--color-text-primary); }
+}
+
+// ── Login prompt ──────────────────────────────────────────────────────────────
+.login-prompt {
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-6);
+  font-family: var(--font-sans);
+}
+
+// ── Light theme ───────────────────────────────────────────────────────────────
+:host-context([data-theme="light"]) {
+  .ds-label { color: var(--color-text-secondary); }
+  .ds-link  { color: var(--color-accent-500); }
+}
