@@ -4,10 +4,9 @@ import { Router } from '@angular/router';
 import { BrandPanelComponent, BrandPill } from '../../shared/brand-panel/brand-panel.component';
 import { ThemeToggleComponent } from '../../../../shared/components/theme-toggle/theme-toggle.component';
 import { ForgotPasswordFormComponent } from './forgot-password-form/forgot-password-form.component';
-import { EmailSentComponent } from './email-sent/email-sent.component';
 import { NewPasswordFormComponent } from './new-password-form/new-password-form.component';
 
-type RecoveryStep = 1 | 2 | 3;
+type RecoveryStep = 1 | 2;
 
 const RECOVERY_PILLS: BrandPill[] = [
   { icon: 'lock',         label: 'Proceso seguro'        },
@@ -22,7 +21,6 @@ const RECOVERY_PILLS: BrandPill[] = [
     BrandPanelComponent,
     ThemeToggleComponent,
     ForgotPasswordFormComponent,
-    EmailSentComponent,
     NewPasswordFormComponent,
   ],
   templateUrl: './forgot-password.page.html',
@@ -45,6 +43,7 @@ export class ForgotPasswordPageComponent {
   onRequestEmail(email: string): void {
     this.isLoading.set(true);
     this.errorMessage.set(null);
+    // TODO: wiring con AuthService.requestPasswordReset(email)
     setTimeout(() => {
       this.isLoading.set(false);
       this.email.set(email);
@@ -52,25 +51,11 @@ export class ForgotPasswordPageComponent {
     }, 1500);
   }
 
-  onResend(): void {
-    // TODO: wiring con AuthService.requestPasswordReset(email)
-    console.log('Reenviar enlace a:', this.email());
-  }
-
-  onHaveCode(): void {
-    this.currentStep.set(3);
-    this.errorMessage.set(null);
-  }
-
-  onBackToStep1(): void {
-    this.currentStep.set(1);
-    this.errorMessage.set(null);
-  }
-
   onResetPassword(password: string): void {
     this.isLoading.set(true);
     this.errorMessage.set(null);
     // TODO: wiring con AuthService.resetPassword({ email, password, token })
+    console.log('Reset password for', this.email(), 'length:', password.length);
     setTimeout(() => {
       this.isLoading.set(false);
       this.successState.set(true);
