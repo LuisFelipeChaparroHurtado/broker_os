@@ -16,43 +16,26 @@
   grid-template-columns: 140px 1fr;
 }
 
+// ── Match select height with lg input ────────────────────────────────────────
+::ng-deep .ds-select {
+  height: 50px;
+  font-size: 16px;
+}
+
 // ── Label ─────────────────────────────────────────────────────────────────────
 .ds-label {
   display: block;
   font-family: var(--font-sans);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--color-text-secondary);
-  margin-bottom: var(--space-1);
-  letter-spacing: 0.2px;
+  margin-bottom: 8px;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
-// ── Password toggle button ────────────────────────────────────────────────────
+// ── Password wrapper ──────────────────────────────────────────────────────────
 .password-wrapper { position: relative; }
-
-.password-toggle {
-  position: absolute;
-  right: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: var(--color-text-muted);
-  cursor: pointer;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  transition: color var(--transition-fast);
-  z-index: 2;
-
-  &:hover { color: var(--color-text-secondary); }
-
-  svg { width: 18px; height: 18px; }
-
-  .icon-eye-off { display: none; }
-  &.active .icon-eye     { display: none; }
-  &.active .icon-eye-off { display: block; }
-}
 
 // ── Password strength meter ───────────────────────────────────────────────────
 .strength-meter {

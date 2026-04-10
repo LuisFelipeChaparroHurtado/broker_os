@@ -8,6 +8,7 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { InputComponent } from '../../../../../shared/components/forms/input/input.component';
+import { PasswordToggleComponent } from '../../../../../shared/components/forms/password-toggle/password-toggle.component';
 import { BtnComponent } from '../../../../../shared/components/actions/btn/btn.component';
 import { LinkComponent } from '../../../../../shared/components/actions/link/link.component';
 
@@ -39,7 +40,7 @@ function passwordsMatchValidator(group: AbstractControl): ValidationErrors | nul
 @Component({
   selector: 'app-new-password-form',
   standalone: true,
-  imports: [ReactiveFormsModule, InputComponent, BtnComponent, LinkComponent],
+  imports: [ReactiveFormsModule, InputComponent, PasswordToggleComponent, BtnComponent, LinkComponent],
   templateUrl: './new-password-form.component.html',
   styleUrl: './new-password-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

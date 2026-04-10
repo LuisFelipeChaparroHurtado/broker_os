@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
-import { BrandPanelComponent } from '../../shared/brand-panel/brand-panel.component';
-import { LoginFormComponent } from './login-form/login-form.component';
+import { BrandPanelComponent, BrandPill } from '../../shared/brand-panel/brand-panel.component';
+import { LoginFormComponent, LoginSubmitPayload } from './login-form/login-form.component';
 import { TfaFormComponent } from '../../shared/tfa-form/tfa-form.component';
 import { ThemeToggleComponent } from '../../../../shared/components/theme-toggle/theme-toggle.component';
 import { Router } from '@angular/router';
@@ -20,9 +20,16 @@ export class LoginPageComponent {
   readonly isLoading = signal(false);
   readonly errorMessage = signal<string | null>(null);
 
-  onLogin(credentials: { email: string; password: string }): void {
+  readonly brandPills: BrandPill[] = [
+    { icon: 'monitor', label: 'MT5 Integrado'       },
+    { icon: 'chat',    label: 'Soporte 24/7'        },
+    { icon: 'dollar',  label: 'Retiros Instantaneos' },
+  ];
+
+  onLogin(payload: LoginSubmitPayload): void {
     this.isLoading.set(true);
     this.errorMessage.set(null);
+    console.log('Login con metodo 2FA:', payload.method);
     // Simulate API call
     setTimeout(() => {
       this.isLoading.set(false);

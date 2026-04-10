@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 
-export type BrandPillIcon = 'shield' | 'lock' | 'clock' | 'check-circle' | 'dollar' | 'chat';
+export type BrandPillIcon = 'shield' | 'lock' | 'clock' | 'check-circle' | 'dollar' | 'chat' | 'monitor';
 
 export interface BrandPill {
   icon: BrandPillIcon;
@@ -21,11 +21,11 @@ const DEFAULT_PILLS: BrandPill[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BrandPanelComponent {
-  readonly taglinePre    = input<string>('Acceso seguro');
-  readonly taglineMid    = input<string>('a tu ');
-  readonly taglineAccent = input<string>('cuenta');
+  readonly taglinePre    = input<string>('Tu portal de');
+  readonly taglineMid    = input<string>('trading ');
+  readonly taglineAccent = input<string>('profesional');
   readonly subtitle      = input<string>(
-    'Protegemos tu cuenta con autenticación de dos factores, cifrado de grado militar y sesiones seguras.',
+    'Gestiona cuentas, opera en mercados globales y analiza rendimiento en tiempo real desde una sola plataforma',
   );
   readonly pills = input<BrandPill[]>(DEFAULT_PILLS);
 }

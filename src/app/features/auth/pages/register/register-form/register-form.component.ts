@@ -11,6 +11,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { BtnComponent } from '../../../../../shared/components/actions/btn/btn.component';
 import { CheckboxComponent } from '../../../../../shared/components/forms/checkbox/checkbox.component';
 import { InputComponent } from '../../../../../shared/components/forms/input/input.component';
+import { PasswordToggleComponent } from '../../../../../shared/components/forms/password-toggle/password-toggle.component';
 import { LinkComponent } from '../../../../../shared/components/actions/link/link.component';
 import { SelectComponent, SelectOption } from '../../../../../shared/components/forms/select/select.component';
 
@@ -89,6 +90,7 @@ function passwordsMatchValidator(group: AbstractControl): ValidationErrors | nul
     InputComponent,
     SelectComponent,
     CheckboxComponent,
+    PasswordToggleComponent,
     BtnComponent,
     LinkComponent,
   ],
