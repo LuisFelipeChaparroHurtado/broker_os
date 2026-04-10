@@ -52,4 +52,8 @@ export class LoginPageComponent {
   onRegisterLink(): void {
     this.router.navigate(['/auth/register']);
   }
+
+  onForgotPasswordLink(): void {
+    this.router.navigate(['/auth/forgot-password']);
+  }
 }
