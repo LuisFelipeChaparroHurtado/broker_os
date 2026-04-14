@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
+
+const SECTION_ROUTES: Readonly<Record<string, string>> = {
+  'dashboard': '/app/dashboard',
+  'perfil':    '/app/perfil',
+};
 
 type MenuKey = 'transacciones' | 'trading' | 'productos' | 'referidos';
 
@@ -10,6 +16,8 @@ type MenuKey = 'transacciones' | 'trading' | 'productos' | 'referidos';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent {
+  private readonly router = inject(Router);
+
   readonly collapsed = signal(false);
   readonly mobileOpen = signal(false);
   readonly openMenu = signal<MenuKey | null>('transacciones');
@@ -47,6 +55,9 @@ export class SidebarComponent {
   selectSection(section: string, parent?: MenuKey): void {
     this.activeSection.set(section);
     if (parent) this.openMenu.set(parent);
+    this.mobileOpen.set(false);
+    const route = SECTION_ROUTES[section];
+    if (route) this.router.navigateByUrl(route).catch(() => {});
   }
 
   toggleCollapsed(): void {

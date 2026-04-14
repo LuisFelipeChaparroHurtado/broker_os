@@ -1,0 +1,33 @@
+<section class="perfil-page">
+  <header class="page-header">
+    <p class="page-header__eyebrow">{{ eyebrow }}</p>
+    <h1 class="page-header__title">{{ title }}</h1>
+    <p class="page-header__subtitle">{{ subtitle }}</p>
+  </header>
+
+  <nav class="profile-tabs" role="tablist">
+    @for (tab of tabs; track tab.key) {
+      <button
+        class="profile-tab"
+        type="button"
+        role="tab"
+        [class.active]="activeTab() === tab.key"
+        [attr.aria-selected]="activeTab() === tab.key"
+        (click)="setTab(tab.key)">
+        {{ tab.label }}
+      </button>
+    }
+  </nav>
+
+  <div class="profile-content">
+    @switch (activeTab()) {
+      @case ('datos-personales')  { <app-datos-personales /> }
+      @case ('verificacion-kyc')  { <p>Verificación KYC works</p> }
+      @case ('seguridad')         { <app-seguridad /> }
+      @case ('datos-financieros') { <app-datos-financieros /> }
+      @case ('preferencias')      { <app-preferencias /> }
+      @case ('solicitudes')       { <app-solicitudes /> }
+      @case ('documentos')        { <app-documentos /> }
+    }
+  </div>
+</section>

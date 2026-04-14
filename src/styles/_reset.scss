@@ -20,8 +20,14 @@ body {
 // ── Scrollbar ──────────────────────────────────────
 ::-webkit-scrollbar       { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(92,247,203,0.15); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(92,247,203,0.30); }
+::-webkit-scrollbar-thumb { background: rgba(142, 49, 237, 0.25); border-radius: var(--radius-full); }
+::-webkit-scrollbar-thumb:hover { background: rgba(142, 49, 237, 0.42); }
+
+[data-theme="light"] ::-webkit-scrollbar-thumb       { background: rgba(124, 49, 199, 0.20); }
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: rgba(124, 49, 199, 0.38); }
+
+* { scrollbar-width: thin; scrollbar-color: rgba(142, 49, 237, 0.25) transparent; }
+[data-theme="light"] * { scrollbar-color: rgba(124, 49, 199, 0.20) transparent; }
 
 // ── Utilities ──────────────────────────────────────
 .mono-num {
