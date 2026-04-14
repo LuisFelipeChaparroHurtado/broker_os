@@ -84,7 +84,7 @@ export class LoginStore {
           // Navegamos PRIMERO y reseteamos después para que la vista de OTP
           // siga renderizando hasta que /demo esté listo. Evita el flash del
           // form de login entre el cambio de step y la transición de ruta.
-          this.router.navigate(['/demo']).then(() => this.reset());
+          this.router.navigate(['/app/dashboard']).then(() => this.reset());
         },
         error: (err) => this.handleError(err, 'Código OTP inválido'),
       });

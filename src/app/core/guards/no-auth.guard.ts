@@ -6,11 +6,11 @@ import { AuthStore } from '../../store/auth/auth.store';
  * Bloquea las rutas de autenticación (`/auth/*`) cuando el usuario YA tiene
  * sesión activa. Si un usuario autenticado intenta volver a `/auth/login`
  * (ej. con la flecha de atrás del browser o escribiendo la URL) lo redirige
- * a `/demo`.
+ * al dashboard.
  */
 export const noAuthGuard: CanActivateFn = (): boolean | UrlTree => {
   const authStore = inject(AuthStore);
   const router    = inject(Router);
 
-  return authStore.isAuthenticated() ? router.createUrlTree(['/demo']) : true;
+  return authStore.isAuthenticated() ? router.createUrlTree(['/app/dashboard']) : true;
 };
