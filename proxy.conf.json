@@ -1,0 +1,8 @@
+{
+  "/dev/api": {
+    "target": "https://transactionalapi.branchtech.co",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

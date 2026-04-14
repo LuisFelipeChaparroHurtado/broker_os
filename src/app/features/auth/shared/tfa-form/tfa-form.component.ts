@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, input, output, signal, ElementRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, input, output, signal, ElementRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { BtnComponent } from '../../../../shared/components/actions/btn/btn.component';
 import { LinkComponent } from '../../../../shared/components/actions/link/link.component';
 import { AlertComponent } from '../../../../shared/components/feedback/alert/alert.component';
@@ -19,10 +19,21 @@ export class TfaFormComponent implements AfterViewInit {
   readonly backToLogin = output<void>();
   readonly resendCode = output<void>();
 
+  /** OTP válido por 5 min según el backend — el countdown de reenvío cuadra con eso. */
+  private static readonly RESEND_COOLDOWN_SECONDS = 300;
+
   readonly digits = signal<string[]>(['', '', '', '', '', '']);
-  readonly countdown = signal(30);
+  readonly countdown = signal(TfaFormComponent.RESEND_COOLDOWN_SECONDS);
   readonly canResend = signal(false);
   readonly shaking = signal(false);
+
+  /** Formato mm:ss para mostrar en el template. */
+  readonly countdownDisplay = computed((): string => {
+    const total = this.countdown();
+    const m = Math.floor(total / 60);
+    const s = total % 60;
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  });
 
   @ViewChildren('codeInput') codeInputs!: QueryList<ElementRef<HTMLInputElement>>;
 
@@ -75,7 +86,7 @@ export class TfaFormComponent implements AfterViewInit {
   }
 
   private startCountdown(): void {
-    this.countdown.set(30);
+    this.countdown.set(TfaFormComponent.RESEND_COOLDOWN_SECONDS);
     this.canResend.set(false);
     if (this.timer) clearInterval(this.timer);
     this.timer = setInterval(() => {

@@ -1,4 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api',
+  // Path relativo — el dev-server lo proxyea a
+  // https://transactionalapi.branchtech.co/dev/api vía proxy.conf.json
+  apiUrl: '/dev/api',
 };

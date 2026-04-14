@@ -39,7 +39,7 @@
   @if (canResend()) {
     <app-link href="#" (click)="onResend(); $event.preventDefault()">Reenviar código</app-link>
   } @else {
-    <span class="countdown-text">Reenviar en {{ countdown() }}s</span>
+    <span class="countdown-text">Reenviar en {{ countdownDisplay() }}</span>
   }
 </div>
 

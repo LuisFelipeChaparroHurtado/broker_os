@@ -2,23 +2,65 @@
   @for (toast of toastService.toasts(); track toast.id) {
     <div
       class="ds-toast"
+      [class]="variantClass(toast.variant)"
+      [class.ds-toast--leaving]="toast.removing"
       role="alert"
     >
-      <span class="ds-toast-dot" [class]="dotClass(toast.variant)"></span>
-
-      <div class="ds-toast-body">
-        <div class="ds-toast-title">{{ toast.title }}</div>
-        @if (toast.message) {
-          <div class="ds-toast-sub">{{ toast.message }}</div>
+      <!-- Icono por variante -->
+      <div class="ds-toast-icon">
+        @switch (toast.variant) {
+          @case ('success') {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          }
+          @case ('error') {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          }
+          @case ('info') {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="16" x2="12" y2="12"/>
+              <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+          }
+          @case ('mint') {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            </svg>
+          }
         }
       </div>
 
-      <span
+      <!-- Contenido -->
+      <div class="ds-toast-body">
+        <div class="ds-toast-title">{{ toast.title }}</div>
+        @if (toast.message) {
+          <div class="ds-toast-msg">{{ toast.message }}</div>
+        }
+      </div>
+
+      <!-- Close -->
+      <button
+        type="button"
         class="ds-toast-close"
-        role="button"
-        aria-label="Cerrar"
+        aria-label="Cerrar notificación"
         (click)="toastService.remove(toast.id)"
-      >&#x2715;</span>
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+
+      <!-- Barra de progreso del auto-dismiss -->
+      <div
+        class="ds-toast-progress"
+        [style.animation-duration.ms]="toast.duration"
+      ></div>
     </div>
   }
 </div>

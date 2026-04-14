@@ -1,0 +1,54 @@
+<div class="register-wrapper">
+
+  <app-brand-panel
+    taglinePre="Crea tu cuenta de"
+    taglineMid=""
+    taglineAccent="trading"
+    [subtitle]="brandSubtitle"
+    [pills]="registerPills"
+  ></app-brand-panel>
+
+  <section
+    class="form-panel"
+    [class.form-panel--centered]="step() === 'verify'"
+    aria-label="Formulario de Registro"
+  >
+    <div
+      class="register-card"
+      [class.register-card--compact]="step() === 'verify'"
+    >
+      @if (step() === 'form') {
+        <app-register-form
+          [isLoading]="loading()"
+          (submitForm)="onRegister($event)"
+          (loginLink)="onLoginLink()"
+        ></app-register-form>
+      }
+
+      @if (step() === 'verify') {
+        <app-tfa-form
+          [isLoading]="loading()"
+          (submitCode)="onVerifyOtp($event)"
+          (resendCode)="onResendCode()"
+          (backToLogin)="onBackToForm()"
+        ></app-tfa-form>
+      }
+    </div>
+
+    @if (step() === 'form') {
+      <div class="risk-disclaimer">
+        <p>
+          <strong>Advertencia de Riesgo:</strong> El trading de Forex y CFDs conlleva un alto nivel de riesgo y
+          puede no ser adecuado para todos los inversores. El alto grado de apalancamiento puede actuar tanto
+          a su favor como en su contra. Antes de decidir operar con Forex o CFDs, debe considerar cuidadosamente
+          sus objetivos de inversion, nivel de experiencia y apetito por el riesgo. Existe la posibilidad de que
+          pueda sufrir una perdida de parte o de toda su inversion inicial y, por lo tanto, no debe invertir dinero
+          que no pueda permitirse perder. Debe estar informado de todos los riesgos asociados con el trading de divisas
+          y buscar asesoramiento de un asesor financiero independiente si tiene alguna duda.
+        </p>
+      </div>
+    }
+  </section>
+</div>
+
+<app-theme-toggle></app-theme-toggle>

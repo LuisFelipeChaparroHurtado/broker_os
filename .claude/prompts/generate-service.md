@@ -1,164 +1,318 @@
-# Prompt: Generate Service
+# Prompt: Crear `AuthService` + `AuthStore`
 
-Usa este prompt para generar un service Angular. Especifica el tipo para que el LLM aplique el patrón correcto.
+Sigue el skill **Angular Services**. Asume que `integrityInterceptor`, `authInterceptor` y `ApiClient` ya existen en `core/http/`. **Ningún service firma manualmente** — el interceptor inyecta `X-Timestamp`, `X-Nonce` y `X-Signature` para todo request a `/api/*`.
 
 ---
 
-## Cómo invocar
+## Contrato del Backend
+
+### 1. Iniciar sesión (solicitar OTP)
 
 ```
-Genera un service Angular de tipo "<TIPO>" para: "<DESCRIPCIÓN>"
+POST {{base_url}}/api/v1/auth/session
+Content-Type: application/json
 
-## Contexto
-Lee y aplica:
-- claude/skills/angular-services.md       ← patrones por tipo de service
-- claude/skills/angular-state.md          ← signals y estado
-- claude/context/api-contracts.md         ← contratos de API disponibles
-- claude/skills/angular-best-practices.md ← convenciones TypeScript
+{
+  "email": "user@example.com",
+  "password": "••••••••",
+  "mfa_method": "EMAIL"
+}
+```
 
-## Tipo de service
-[ ] API Service    ← solo HTTP, devuelve Observable, sin estado
-[ ] Store Service  ← estado con signals, orquesta el API service
-[ ] Domain Service ← lógica de negocio pura, sin HTTP ni estado
-[ ] UI Service     ← estado de interfaz (modal, toast, loading global)
+**Respuesta esperada (200):**
 
-## Especificación
+```json
+{
+  "session_token": "tmp_xxx",
+  "mfa_method": "EMAIL",
+  "expires_in": 300
+}
+```
 
-### Nombre de clase
-<NOMBRE>Service  |  <NOMBRE>Store  |  <NOMBRE>ApiService
+### 2. Verificar OTP
 
-### Ubicación
-src/app/<core | features/X/services | features/X/store>/
+```
+POST {{base_url}}/api/v1/auth/session/otp/verification
+Content-Type: application/json
+Authorization: Bearer <session_token>
 
-### Entidad que maneja
+{
+  "otp_code": "482917"
+}
+```
+
+**Respuesta esperada (200):**
+
+```json
+{
+  "access_token": "eyJhbGc...",
+  "refresh_token": "eyJhbGc...",
+  "user": { "id": "...", "email": "...", "name": "..." }
+}
+```
+
+---
+
+## Integridad de Mensaje — Recordatorio
+
+Ambos endpoints están bajo `/api/*` → el `integrityInterceptor` los firma automáticamente. La firma es:
+
+```
+SHA256(path + timestamp + nonce + body)
+```
+
+- `path` → `/api/v1/auth/session` o `/api/v1/auth/session/otp/verification`
+- `timestamp` → `Date.now().toString()`
+- `nonce` → `crypto.randomUUID()`
+- `body` → `JSON.stringify(requestBody)`
+
+Headers añadidos por el interceptor:
+
+- `X-Timestamp`
+- `X-Nonce`
+- `X-Signature`
+
+**No escribir firmas en el service.** Si el request sale sin firma es porque el path no empieza con `/api/` o el interceptor no está registrado en `app.config.ts`.
+
+---
+
+## Estructura a Crear
+
+```
+src/app/features/auth/
+├── models/
+│   └── auth.model.ts
+├── services/
+│   └── auth-api.service.ts
+└── store/
+    └── auth.store.ts
+```
+
+---
+
+## Modelos
+
 ```typescript
-interface <ENTIDAD> {
-  // definir aquí
+// features/auth/models/auth.model.ts
+export type MfaMethod = "EMAIL" | "SMS" | "TOTP";
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+  mfa_method: MfaMethod;
+}
+
+export interface LoginResponse {
+  session_token: string;
+  mfa_method: MfaMethod;
+  expires_in: number;
+}
+
+export interface OtpVerificationRequest {
+  otp_code: string;
+}
+
+export interface OtpVerificationResponse {
+  access_token: string;
+  refresh_token: string;
+  user: AuthUser;
+}
+
+export interface AuthUser {
+  id: string;
+  email: string;
+  name: string;
 }
 ```
 
-### Operaciones requeridas (para API Service)
-- <método HTTP> <endpoint> → <tipo retorno>
-- <método HTTP> <endpoint> → <tipo retorno>
-
-### Estado que mantiene (para Store Service)
-- <campo>: <Tipo>   — <descripción>
-- <campo>: <Tipo>   — <descripción>
-
-### Computed que expone (para Store Service)
-- <nombre>: <Tipo>  — <descripción de la derivación>
-
-### Acciones / métodos públicos
-- <método>(<params>): <retorno>  — <descripción>
-
-### Reglas de negocio (si aplica)
-<Describir constraints, validaciones o comportamiento especial>
-
-## Reglas obligatorias
-- providedIn: 'root'
-- Sin any — TypeScript estricto
-- API Service: NUNCA hace subscribe, siempre devuelve Observable<T>
-- Store Service: estado privado con signal(), selectores públicos con asReadonly()
-- Un único método privado patch() para mutar el estado del store
-- Optimistic updates cuando aplique, con rollback en error
-```
-
 ---
 
-## Ejemplo 1 — API Service
+## API Service — Solo HTTP
 
-```
-Genera un service Angular de tipo "API Service" para: "Gestión de trades"
+```typescript
+// features/auth/services/auth-api.service.ts
+@Injectable({ providedIn: "root" })
+export class AuthApiService {
+  private readonly api = inject(ApiClient);
 
-## Nombre: TradesApiService
-## Ubicación: src/app/features/trades/services/
+  // POST /api/v1/auth/session
+  login(dto: LoginRequest): Observable<LoginResponse> {
+    return this.api.post<LoginResponse>("/v1/auth/session", dto);
+  }
 
-## Entidad
-interface Trade {
-  id: string; symbol: string; side: 'BUY'|'SELL';
-  orderType: 'MARKET'|'LIMIT'|'STOP_LIMIT';
-  status: 'OPEN'|'CLOSED'|'CANCELLED';
-  entryPrice: number; currentPrice: number;
-  quantity: number; pnl: number; timestamp: string;
+  // POST /api/v1/auth/session/otp/verification
+  verifyOtp(dto: OtpVerificationRequest): Observable<OtpVerificationResponse> {
+    return this.api.post<OtpVerificationResponse>("/v1/auth/session/otp/verification", dto);
+  }
+
+  // DELETE /api/v1/auth/session  (logout)
+  logout(): Observable<void> {
+    return this.api.delete<void>("/v1/auth/session");
+  }
 }
+```
 
-## Operaciones
-- GET  /trades          → PaginatedResponse<Trade>  (acepta TradeFilters)
-- GET  /trades/:id      → ApiResponse<Trade>
-- POST /trades          → ApiResponse<Trade>         (body: CreateTradeDto)
-- DELETE /trades/:id    → void
+> El `ApiClient` ya antepone `/api` al `baseUrl`, por eso los paths empiezan en `/v1/...`.
+
+---
+
+## Store Service — Estado + Orquestación
+
+```typescript
+// features/auth/store/auth.store.ts
+@Injectable({ providedIn: "root" })
+export class AuthStore {
+  // ─── Dependencias ──────────────────────────────
+  private readonly api = inject(AuthApiService);
+  private readonly toast = inject(ToastService);
+  private readonly router = inject(Router);
+
+  // ─── Estado privado ────────────────────────────
+  private readonly _user = signal<AuthUser | null>(null);
+  private readonly _accessToken = signal<string | null>(null);
+  private readonly _sessionToken = signal<string | null>(null); // temporal pre-OTP
+  private readonly _mfaMethod = signal<MfaMethod | null>(null);
+  private readonly _loading = signal<boolean>(false);
+  private readonly _error = signal<string | null>(null);
+  private readonly _awaitingOtp = signal<boolean>(false);
+
+  // ─── Estado público (readonly) ─────────────────
+  readonly user = this._user.asReadonly();
+  readonly accessToken = this._accessToken.asReadonly();
+  readonly loading = this._loading.asReadonly();
+  readonly error = this._error.asReadonly();
+  readonly awaitingOtp = this._awaitingOtp.asReadonly();
+  readonly mfaMethod = this._mfaMethod.asReadonly();
+
+  // ─── Computed ──────────────────────────────────
+  readonly isAuthenticated = computed(() => this._accessToken() !== null);
+  readonly hasError = computed(() => this._error() !== null);
+
+  // ─── Acciones ──────────────────────────────────
+
+  /** Paso 1: email + password → dispara envío de OTP */
+  login(email: string, password: string, mfa_method: MfaMethod = "EMAIL"): void {
+    this._loading.set(true);
+    this._error.set(null);
+
+    this.api
+      .login({ email, password, mfa_method })
+      .pipe(finalize(() => this._loading.set(false)))
+      .subscribe({
+        next: (res) => {
+          this._sessionToken.set(res.session_token);
+          this._mfaMethod.set(res.mfa_method);
+          this._awaitingOtp.set(true);
+          this.toast.info(`Código enviado vía ${res.mfa_method}`);
+        },
+        error: (err) => {
+          this._error.set(err?.error?.message ?? "Credenciales inválidas");
+          this.toast.error(this._error()!);
+        },
+      });
+  }
+
+  /** Paso 2: código OTP → tokens finales */
+  verifyOtp(otp_code: string): void {
+    if (!this._sessionToken()) {
+      this._error.set("No hay sesión pendiente de verificación");
+      return;
+    }
+
+    this._loading.set(true);
+    this._error.set(null);
+
+    this.api
+      .verifyOtp({ otp_code })
+      .pipe(finalize(() => this._loading.set(false)))
+      .subscribe({
+        next: (res) => {
+          this._accessToken.set(res.access_token);
+          this._user.set(res.user);
+          this._sessionToken.set(null);
+          this._awaitingOtp.set(false);
+          this._mfaMethod.set(null);
+          this.toast.success(`Bienvenido, ${res.user.name}`);
+          this.router.navigate(["/dashboard"]);
+        },
+        error: (err) => {
+          this._error.set(err?.error?.message ?? "Código OTP inválido");
+          this.toast.error(this._error()!);
+        },
+      });
+  }
+
+  logout(): void {
+    this.api.logout().subscribe({
+      complete: () => this.reset(),
+    });
+  }
+
+  clearError(): void {
+    this._error.set(null);
+  }
+
+  private reset(): void {
+    this._user.set(null);
+    this._accessToken.set(null);
+    this._sessionToken.set(null);
+    this._mfaMethod.set(null);
+    this._awaitingOtp.set(false);
+    this._error.set(null);
+    this.router.navigate(["/login"]);
+  }
+}
 ```
 
 ---
 
-## Ejemplo 2 — Store Service
+## Uso en Componentes
 
-```
-Genera un service Angular de tipo "Store Service" para: "Estado de trades"
+```typescript
+// features/auth/pages/login.page.ts
+@Component({
+  /* ... */
+})
+export class LoginPage {
+  private readonly store = inject(AuthStore);
 
-## Nombre: TradesStore
-## Ubicación: src/app/features/trades/store/
+  readonly loading = this.store.loading;
+  readonly error = this.store.error;
+  readonly awaitingOtp = this.store.awaitingOtp;
 
-## Entidad: Trade (ver arriba)
+  onLogin(email: string, password: string): void {
+    this.store.login(email, password, "EMAIL");
+  }
 
-## Dependencias: TradesApiService
-
-## Estado
-- items:   Trade[]      — lista de trades cargados
-- total:   number       — total para paginación
-- loading: boolean      — petición en curso
-- error:   string|null  — mensaje de error o null
-- filters: TradeFilters — filtros activos
-
-## Computed
-- openTrades:    Trade[]  — items donde status === 'OPEN'
-- totalPnL:      number   — suma de pnl de todos los items
-- isEmpty:       boolean  — items.length === 0 && !loading
-
-## Acciones
-- loadAll(filters?: TradeFilters): void    — carga paginada
-- cancel(id: string): void                 — cancela con optimistic update
-- updateFilters(f: Partial<TradeFilters>): void
-- clearError(): void
-- refresh(): void
+  onVerifyOtp(code: string): void {
+    this.store.verifyOtp(code);
+  }
+}
 ```
 
 ---
 
-## Ejemplo 3 — Domain Service
+## Checklist de Verificación
 
-```
-Genera un service Angular de tipo "Domain Service" para: "Cálculos de P&L y métricas de trades"
-
-## Nombre: TradeCalculationsService
-## Ubicación: src/app/features/trades/services/
-
-## Métodos
-- calculatePnL(trade: Trade): number
-  → (currentPrice - entryPrice) * quantity si BUY
-  → (entryPrice - currentPrice) * quantity si SELL
-
-- calculatePnLPercent(trade: Trade): number
-  → (pnl / (entryPrice * quantity)) * 100
-
-- groupBySymbol(trades: Trade[]): Record<string, Trade[]>
-
-- getSummary(trades: Trade[]): TradeSummary
-  → { total, open, closed, cancelled, totalPnL, winRate }
-
-- formatPnL(value: number): string
-  → '+$1,234.56' | '-$234.56'
-```
+- [ ] `AuthApiService` solo hace HTTP, devuelve `Observable<T>`, no tiene `subscribe`
+- [ ] `AuthStore` suscribe y maneja signals con `.asReadonly()`
+- [ ] Ningún `sha256`, `X-Signature` ni `crypto-js` aparece en `features/auth/` — eso vive en `core/http/interceptors/integrity.interceptor.ts`
+- [ ] Ambos endpoints se llaman vía `ApiClient`, por lo tanto salen hacia `/api/v1/auth/...` y el interceptor los firma
+- [ ] `authInterceptor` inyecta `Authorization: Bearer <session_token>` en el paso 2 (OTP) antes de que firme `integrityInterceptor`
+- [ ] Modelos tipados, sin `any`
+- [ ] Errores capturados en el Store, mostrados vía `ToastService`
 
 ---
 
-## Checklist del output generado
+## Verificación Manual (DevTools → Network)
 
-- [ ] `@Injectable({ providedIn: 'root' })`
-- [ ] Sin `any` — todos los tipos explícitos
-- [ ] **API Service**: solo `Observable<T>` — cero subscribes internos
-- [ ] **Store**: `_estado` privado signal, selectores `.asReadonly()`
-- [ ] **Store**: método `patch()` privado como único punto de mutación
-- [ ] **Store**: `finalize()` en calls HTTP para quitar loading
-- [ ] **Store**: optimistic update con rollback en cancel/delete
-- [ ] **Domain**: sin `inject()`, sin HTTP — solo lógica pura y testeada
+Al enviar `POST /api/v1/auth/session`, el request debe incluir:
+
+```
+X-Timestamp: 1760000000000
+X-Nonce: 550e8400-e29b-41d4-a716-446655440000
+X-Signature: a3f5c8...  (64 chars hex)
+Content-Type: application/json
+```
+
+Si falta cualquiera de estos tres headers → el interceptor no está corriendo o el path no empieza con `/api/`.
