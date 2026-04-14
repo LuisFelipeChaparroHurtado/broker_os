@@ -1,0 +1,35 @@
+<div class="solicitudes">
+
+  <header class="solicitudes__header">
+    <div>
+      <h3 class="solicitudes__title">Mis Solicitudes</h3>
+      <p class="solicitudes__subtitle">Historial de solicitudes realizadas</p>
+    </div>
+    <button type="button" class="action-btn action-btn--primary" (click)="onNewRequest()">
+      <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 4.5V9.5M4.5 7H9.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Nueva solicitud
+    </button>
+  </header>
+
+  <ul class="request-list">
+    @for (s of solicitudes(); track s.id) {
+      <li class="request-card" (click)="onOpenRequest(s)">
+        <div class="request-card__info">
+          <p class="request-card__id">{{ s.id }}</p>
+          <p class="request-card__title">{{ s.title }}</p>
+          <p class="request-card__date">{{ s.date }}</p>
+        </div>
+
+        <div class="request-card__status">
+          @switch (s.status) {
+            @case ('approved') { <span class="status-badge status-badge--success">✓ Aprobado</span> }
+            @case ('resolved') { <span class="status-badge status-badge--success">✓ Resuelto</span> }
+            @case ('pending')  { <span class="status-badge status-badge--pending">⏳ En revision</span> }
+            @case ('rejected') { <span class="status-badge status-badge--danger">✗ Rechazado</span> }
+          }
+        </div>
+      </li>
+    }
+  </ul>
+
+</div>

@@ -1,0 +1,57 @@
+<div class="preferencias">
+
+  <!-- General -->
+  <section class="info-card">
+    <header class="info-card__header">
+      <div>
+        <h3 class="info-card__title">General</h3>
+        <p class="info-card__subtitle">Configuracion regional y de idioma</p>
+      </div>
+    </header>
+
+    <ul class="field-list">
+      @for (row of general(); track row.label) {
+        <li class="field-row">
+          <span class="field-label">{{ row.label }}</span>
+          <span class="field-value" [class.field-value--mono]="row.mono">
+            @if (row.flag) { <span class="field-flag">{{ row.flag }}</span> }
+            {{ row.value }}
+          </span>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <!-- Notificaciones -->
+  <section class="info-card">
+    <header class="info-card__header">
+      <div>
+        <h3 class="info-card__title">Notificaciones</h3>
+        <p class="info-card__subtitle">Elige como recibir las notificaciones</p>
+      </div>
+    </header>
+
+    <div class="notif-table">
+      <div class="notif-header">
+        <span class="notif-header__type">Tipo</span>
+        <div class="notif-header__cols">
+          <span class="notif-header__col">Email</span>
+          <span class="notif-header__col">Push</span>
+          <span class="notif-header__col">SMS</span>
+        </div>
+      </div>
+
+      @for (row of notifications(); track row.key) {
+        <div class="notif-row">
+          <span class="notif-row__type">{{ row.type }}</span>
+          <div class="notif-row__cols">
+            <button type="button" class="toggle-switch" [class.toggle-switch--on]="row.email" [attr.aria-label]="'Email ' + row.type" (click)="toggleNotif(row.key, 'email')"></button>
+            <button type="button" class="toggle-switch" [class.toggle-switch--on]="row.push"  [attr.aria-label]="'Push ' + row.type"  (click)="toggleNotif(row.key, 'push')"></button>
+            <button type="button" class="toggle-switch" [class.toggle-switch--on]="row.sms"   [attr.aria-label]="'SMS ' + row.type"   (click)="toggleNotif(row.key, 'sms')"></button>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+</div>

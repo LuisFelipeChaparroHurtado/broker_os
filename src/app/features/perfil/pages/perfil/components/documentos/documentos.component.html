@@ -1,0 +1,35 @@
+<div class="documentos">
+
+  @for (group of groups(); track group.title) {
+    <section class="info-card">
+      <header class="info-card__header">
+        <div>
+          <h3 class="info-card__title">{{ group.title }}</h3>
+          <p class="info-card__subtitle">{{ group.subtitle }}</p>
+        </div>
+      </header>
+
+      <ul class="doc-list">
+        @for (item of group.items; track item.name) {
+          <li class="doc-row">
+            <div class="doc-row__info">
+              <p class="doc-row__name">{{ item.name }}</p>
+              <p class="doc-row__date">{{ item.date }}</p>
+            </div>
+
+            <button type="button" class="action-btn action-btn--ghost action-btn--sm" (click)="onDocAction(item)">
+              @if (item.action === 'download') {
+                <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 2V9M7 9L4.5 6.5M7 9L9.5 6.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11H12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                Descargar
+              } @else {
+                <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M2 2H12V12H2V2Z" stroke="currentColor" stroke-width="1.3"/><path d="M4 5H10M4 7.5H8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                Ver
+              }
+            </button>
+          </li>
+        }
+      </ul>
+    </section>
+  }
+
+</div>
