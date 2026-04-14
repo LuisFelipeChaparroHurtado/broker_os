@@ -1,12 +1,22 @@
-<app-sidebar
-  brandName="Broker OS"
-  brandTag="Design System"
-  [sections]="sections"
-  [activeKey]="activeKey()"
-  (navigate)="onNavigate($event)"
-  (themeToggle)="onThemeToggle()"
-></app-sidebar>
-
-<main class="shell-content">
-  <router-outlet></router-outlet>
-</main>
+<div class="shell-wrapper">
+  <app-sidebar #sb />
+  <div class="shell-main">
+    <app-topbar
+      [breadcrumb]="['Broker OS', currentSection()]"
+      [activeLang]="'ES'"
+      [hasNotifications]="true"
+      [userName]="'CM'"
+      (menuClick)="sb.toggleMobile()"
+      (langChange)="onLangChange($event)"
+      (notificationsClick)="onNotificationsClick()"
+      (supportClick)="onSupportClick()"
+      (helpItemClick)="onHelpItemClick($event)"
+      (avatarClick)="onAvatarClick()"
+      (profileClick)="onProfileClick()"
+      (settingsClick)="onSettingsClick()"
+      (logoutClick)="onLogoutClick()" />
+    <main class="shell-content">
+      <router-outlet />
+    </main>
+  </div>
+</div>

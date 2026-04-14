@@ -8,10 +8,25 @@ export const routes: Routes = [
     canActivate: [noAuthGuard],
     loadChildren: () => import('./features/auth/auth.routes').then(m => m.authRoutes),
   },
+
+  {
+    path: 'app',
+    loadComponent: () => import('./layout/shell/shell.component').then(m => m.ShellComponent),
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+      {
+        path: 'dashboard',
+        loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.dashboardRoutes),
+      },
+    ],
+  },
   {
     path: '',
-    canActivate: [authGuard],
-    loadComponent: () => import('./layout/shell/shell.component').then(m => m.ShellComponent),
+    loadComponent: () => import('./layout/shell-old/shell.component').then(m => m.ShellComponent),
     children: [
       {
         path: '',
