@@ -1,11 +1,22 @@
-:host {
+:host { display: block; height: 100vh; }
+
+.shell-wrapper {
   display: flex;
   height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.shell-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
 .shell-content {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  scroll-behavior: smooth;
+  background: var(--color-bg-page);
 }

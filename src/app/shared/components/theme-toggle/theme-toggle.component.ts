@@ -1,7 +1,5 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
-
-const STORAGE_KEY = 'broker-os-theme';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { ThemeService } from '../../../core/theme/theme.service';
 
 @Component({
   selector: 'app-theme-toggle',
@@ -10,23 +8,12 @@ const STORAGE_KEY = 'broker-os-theme';
   styleUrl: './theme-toggle.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ThemeToggleComponent implements OnInit {
-  private readonly document = inject(DOCUMENT);
+export class ThemeToggleComponent {
+  private readonly themeService = inject(ThemeService);
 
-  readonly isDarkTheme = signal(true);
-
-  ngOnInit(): void {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    const isDark = saved !== 'light';
-    this.isDarkTheme.set(isDark);
-    this.document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-  }
+  readonly isDarkTheme = this.themeService.isDark;
 
   toggleTheme(): void {
-    const isDark = !this.isDarkTheme();
-    this.isDarkTheme.set(isDark);
-    const theme = isDark ? 'dark' : 'light';
-    this.document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem(STORAGE_KEY, theme);
+    this.themeService.toggle();
   }
 }

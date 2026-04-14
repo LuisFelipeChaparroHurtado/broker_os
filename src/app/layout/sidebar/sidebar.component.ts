@@ -1,20 +1,6 @@
-import { Component, ChangeDetectionStrategy, input, output, signal, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
-export interface NavSubItem {
-  label: string;
-  key: string;
-}
-
-export interface NavItem {
-  label: string;
-  key: string;
-  children?: NavSubItem[];
-}
-
-export interface NavSection {
-  label: string;
-  items: NavItem[];
-}
+type MenuKey = 'transacciones' | 'trading' | 'productos' | 'referidos';
 
 @Component({
   selector: 'app-sidebar',
@@ -24,61 +10,52 @@ export interface NavSection {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent {
-  readonly brandName = input('Broker OS');
-  readonly brandTag = input('Design System');
-  readonly sections = input<NavSection[]>([]);
-  readonly activeKey = input('');
-
-  readonly navigate = output<string>();
-  readonly themeToggle = output<void>();
-
-  // Track collapsed sections and groups
-  readonly collapsedSections = signal<Set<number>>(new Set());
-  readonly collapsedGroups = signal<Set<string>>(new Set<string>());
+  readonly collapsed = signal(false);
   readonly mobileOpen = signal(false);
-  readonly isDark = signal(true);
+  readonly openMenu = signal<MenuKey | null>('transacciones');
+  readonly activeSection = signal<string>('dashboard');
 
-  toggleSection(index: number): void {
-    this.collapsedSections.update(s => {
-      const next = new Set(s);
-      next.has(index) ? next.delete(index) : next.add(index);
-      return next;
-    });
+  readonly brand = {
+    name: 'Broker OS',
+    tag: 'Portal Cliente',
+  };
+
+  isMenuOpen(key: MenuKey): boolean {
+    return this.openMenu() === key && !this.collapsed();
   }
 
-  isSectionCollapsed(index: number): boolean {
-    return this.collapsedSections().has(index);
+  isActive(section: string): boolean {
+    return this.activeSection() === section;
   }
 
-  toggleGroup(key: string): void {
-    this.collapsedGroups.update(s => {
-      const next = new Set(s);
-      next.has(key) ? next.delete(key) : next.add(key);
-      return next;
-    });
+  isParentActive(_menu: MenuKey, children: readonly string[]): boolean {
+    return children.includes(this.activeSection());
   }
 
-  isGroupCollapsed(key: string): boolean {
-    return this.collapsedGroups().has(key);
-  }
+  toggleMobile(): void { this.mobileOpen.update(v => !v); }
+  closeMobile(): void { this.mobileOpen.set(false); }
 
-  onNavigate(key: string): void {
-    this.navigate.emit(key);
-  }
-
-  onItemClick(item: NavItem): void {
-    if (item.children?.length) {
-      this.toggleGroup(item.key);
+  toggleMenu(key: MenuKey): void {
+    if (this.collapsed()) {
+      this.collapsed.set(false);
+      this.openMenu.set(key);
+      return;
     }
-    this.navigate.emit(item.key);
+    this.openMenu.update(curr => (curr === key ? null : key));
   }
 
-  onThemeToggle(): void {
-    this.isDark.update(v => !v);
-    this.themeToggle.emit();
+  selectSection(section: string, parent?: MenuKey): void {
+    this.activeSection.set(section);
+    if (parent) this.openMenu.set(parent);
   }
 
-  toggleMobile(): void {
-    this.mobileOpen.update(v => !v);
+  toggleCollapsed(): void {
+    this.collapsed.update(v => !v);
+    if (this.collapsed()) this.openMenu.set(null);
   }
+
+  readonly transaccionesChildren = ['depositar', 'retiros', 'transferencias', 'historial-tx'] as const;
+  readonly tradingChildren = ['crear-cuenta', 'mis-cuentas', 'webtrader', 'tradingview', 'social-trader', 'copy-trading'] as const;
+  readonly productosChildren = ['leverage-12x', 'prop-firm', 'bin-plus', 'pamm-account', 'ecn-account'] as const;
+  readonly referidosChildren = ['resumen-ib', 'mi-comunidad', 'centro-puntos'] as const;
 }
